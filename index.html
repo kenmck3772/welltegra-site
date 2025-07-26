@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>v15 - Well-Tegra Data Solutions | Integrated Well Delivery Platform</title>
+    <title>v20 - Well-Tegra Data Solutions | Integrated Well Delivery Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,18 +62,18 @@
         .theme-dark .nav-link { color: #94a3b8; }
         .theme-light .nav-link.active { color: #2563eb; border-bottom-color: #2563eb; }
         .theme-dark .nav-link.active { color: #60a5fa; border-bottom-color: #60a5fa; }
+        .nav-link.disabled { color: #9ca3af !important; cursor: not-allowed; opacity: 0.5; }
         
         .theme-light h1, .theme-light h2, .theme-light h3, .theme-light h4 { color: #111827; } 
         .theme-dark h1, .theme-dark h2, .theme-dark h3, .theme-dark h4 { color: #f8fafc; }
         
-        /* Set base paragraph color to black for light theme for max contrast */
         .theme-light p, .theme-light span, .theme-light label, .theme-light td, .theme-light li { color: #1f2937; line-height: 1.65; }
         .theme-dark p, .theme-dark span, .theme-dark label, .theme-dark td, .theme-dark li { color: #e2e8f0; line-height: 1.65; }
 
         .theme-light .table-header { background-color: #f1f5f9; }
         .theme-dark .table-header { background-color: #334155; }
         .theme-light .table-row-alt { background-color: #f8fafc; }
-        .theme-dark .table-row-alt { background-color: #1e293b/50; }
+        .theme-dark .table-row-alt { background-color: rgba(30, 41, 59, 0.5); }
         .theme-light .modal-container { background-color: white; }
         .theme-dark .modal-container { background-color: #1e293b; }
         .theme-light .modal-tab { color: #6b7280; }
@@ -107,13 +107,13 @@
         .risk-medium { background-color: #fef9c3; color: #854d0e; }
         .risk-high { background-color: #fee2e2; color: #991b1b; }
         .status-available, .status-active-underperforming, .status-active-lowinjectivity, .status-approved, .status-mustered, .status-passed, .status-active-restoredproduction { background-color: #dcfce7; color: #166534; }
-        .status-maintenance, .status-pending, .status-intransit { background-color: #fef9c3; color: #854d0e; }
+        .status-maintenance, .status-pending, .status-intransit, .status-standby { background-color: #fef9c3; color: #854d0e; }
         .status-unavailable, .status-onjob, .status-expired, .status-unaccounted, .status-failed, .status-drilling-criticalsection, .status-shut-in, .status-shut-in-wellintegrityissues, .status-pacandidate { background-color: #fee2e2; color: #991b1b; }
         .status-onboard { background-color: #cffafe; color: #0e7490; }
 
         /* --- Performer View Styles --- */
         .performer-view .dashboard-grid { display: grid; grid-template-columns: 2fr 5fr 3fr; gap: 1.5rem; height: calc(100vh - 80px); }
-        .performer-view .kpi-card { background-color: #334155; border-radius: 0.5rem; border: 1px solid #475569; color: #f8fafc; }
+        .performer-view .kpi-card { background-color: #1e293b; border-radius: 0.5rem; border: 1px solid #334155; color: #f8fafc; }
         .performer-view .procedure-step { border-left: 4px solid #475569; transition: all 0.3s; cursor: pointer; }
         .performer-view .procedure-step.active { background-color: rgba(96, 165, 250, 0.1); border-left-color: #60a5fa; }
         .performer-view .procedure-step.completed { border-left-color: #64748b; opacity: 0.6; }
@@ -121,8 +121,18 @@
         .performer-view .alarm, .emergency-header { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         
+        /* --- KPI Gauge Styles --- */
+        .gauge-bg { stroke: #374151; }
+        .gauge-fg { transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
+        .gauge-text { font-family: 'Roboto Mono', monospace; }
+        .bar-bg { background-color: #374151; }
+        .bar-fg { transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out; }
+        .text-normal { color: #5eead4; } .stroke-normal { stroke: #5eead4; } .bg-normal { background-color: #5eead4; }
+        .text-warning { color: #facc15; } .stroke-warning { stroke: #facc15; } .bg-warning { background-color: #facc15; }
+        .text-danger { color: #f87171; } .stroke-danger { stroke: #f87171; } .bg-danger { background-color: #f87171; }
+
+
         /* --- General UI Transitions & Styles --- */
-        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; padding: 0.5rem 0.25rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; }
         .ai-recommendation-card { border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s ease-in-out; }
         .ai-recommendation-card:hover { border-color: #2563eb; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
         .ai-recommendation-card.selected { border-width: 2px; }
@@ -358,8 +368,8 @@
         </div>
 
         <div id="logistics-view" class="view-container hidden max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="text-center"><h2 class="text-3xl font-bold tracking-tight">Logistics & Asset Management</h2><p class="mt-2 max-w-2xl mx-auto text-lg">Manage equipment and personnel availability, certifications, and maintenance schedules.</p></div>
-            <div class="mt-10 grid gap-12 lg:grid-cols-2">
+            <div class="text-center"><h2 class="text-3xl font-bold tracking-tight">Logistics & Asset Management</h2><p id="logistics-subtitle" class="mt-2 max-w-2xl mx-auto text-lg">Manage equipment and personnel availability, certifications, and maintenance schedules.</p></div>
+            <div id="logistics-content" class="mt-10 grid gap-12 lg:grid-cols-2">
                 <div class="light-card p-6 rounded-lg"><h3 class="text-xl font-semibold mb-4">Equipment Hub</h3><input type="text" id="equipment-search" placeholder="Search equipment..." class="w-full p-2 rounded-md mb-4"><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="table-header"><tr><th class="p-2">Asset ID</th><th>Type</th><th>Location</th><th>Test Status</th><th>Actions</th></tr></thead><tbody id="equipment-table-body"></tbody></table></div></div>
                 <div class="light-card p-6 rounded-lg"><h3 class="text-xl font-semibold mb-4">Personnel Roster</h3><input type="text" id="personnel-search" placeholder="Search personnel..." class="w-full p-2 rounded-md mb-4"><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="table-header"><tr><th class="p-2">Name</th><th>Role</th><th>Status</th><th>Certs Valid</th></tr></thead><tbody id="personnel-table-body"></tbody></table></div></div>
             </div>
@@ -384,7 +394,7 @@
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight">Well-Tegra White Paper</h2>
                 <p class="mt-4 max-w-2xl mx-auto text-lg">Dive deeper into the technical architecture and strategic vision behind the Well-Tegra platform. Our white paper provides a comprehensive overview of the privacy-preserving AI, enterprise blockchain, and data unification strategies that power our solution.</p>
-                <a href="https://welltegra.network/assets/Well-Tegra_White_Paper.pdf" target="_blank" download class="mt-8 inline-block rounded-md bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 transition">
+                <a href="https://docs.google.com/document/d/1HEIv2E17aWXYltLh17FvDxc5Q3jWI7FA6fzU1JAhRwg/edit?usp=sharing" target="_blank" download class="mt-8 inline-block rounded-md bg-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 transition">
                     Download the White Paper
                 </a>
             </div>
@@ -430,23 +440,8 @@
                     </div>
                 </div>
                 <div class="flex flex-col gap-4 lg:gap-6">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-                        <div class="kpi-card p-4">
-                            <p id="kpi-label-1" class="text-sm">Hookload (klbf)</p>
-                            <p id="kpi-hookload" class="text-3xl font-bold">0.0</p>
-                        </div>
-                        <div id="kpi-card-pressure" class="kpi-card p-4">
-                            <p id="kpi-label-2" class="text-sm">Pump Pressure (psi)</p>
-                            <p id="kpi-pressure" class="text-3xl font-bold">0</p>
-                        </div>
-                        <div class="kpi-card p-4">
-                            <p id="kpi-label-3" class="text-sm">CT Speed (ft/min)</p>
-                            <p id="kpi-speed" class="text-3xl font-bold">0</p>
-                        </div>
-                        <div class="kpi-card p-4">
-                            <p class="text-sm">Depth (ft)</p>
-                            <p id="kpi-depth" class="text-3xl font-bold">0</p>
-                        </div>
+                    <div id="kpi-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+                        <!-- KPI Gauges will be injected here by JS -->
                     </div>
                     <div id="chart-card" class="flex-1 bg-slate-800/50 rounded-lg p-4 flex-col"><h3 class="text-lg font-semibold mb-2">Tubing Force Analysis: Plan vs. Actual</h3><div class="flex-1 relative"><canvas id="tfaChart"></canvas></div></div>
                 </div>
@@ -477,178 +472,483 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // --- UI COMPONENT BUILDERS (FIX) ---
+    /**
+     * Creates a radial gauge component and injects it into a container.
+     * @param {string} containerId - The ID of the element to contain the gauge.
+     * @param {string} label - The text label for the gauge.
+     * @param {string} units - The units for the gauge value.
+     * @param {number} maxValue - The maximum value for the gauge's scale.
+     */
+    function createRadialGauge(containerId, label, units, maxValue) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const size = 120;
+        const strokeWidth = 10;
+        const radius = (size / 2) - (strokeWidth * 2);
+        const circumference = radius * 2 * Math.PI;
+
+        container.innerHTML = `
+            <div class="relative" style="width:${size}px; height:${size}px;">
+                <svg class="w-full h-full" viewBox="0 0 ${size} ${size}">
+                    <circle class="gauge-bg" cx="${size/2}" cy="${size/2}" r="${radius}" stroke-width="${strokeWidth}"></circle>
+                    <circle class="gauge-fg stroke-normal" cx="${size/2}" cy="${size/2}" r="${radius}" stroke-width="${strokeWidth}"
+                            stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"
+                            style="transition: stroke-dashoffset 0.5s;"></circle>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span class="gauge-value text-2xl font-bold gauge-text text-normal">0</span>
+                    <span class="gauge-units text-xs text-slate-400">${units}</span>
+                </div>
+            </div>
+            <h4 class="mt-2 text-sm font-semibold text-slate-300">${label}</h4>
+        `;
+    }
+
+    /**
+     * Updates an existing radial gauge component with a new value.
+     * @param {string} containerId - The ID of the gauge's container element.
+     * @param {number} value - The new value to display.
+     * @param {number} maxValue - The maximum value of the gauge's scale.
+     */
+    function updateRadialGauge(containerId, value, maxValue) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const gaugeFg = container.querySelector('.gauge-fg');
+        const gaugeValue = container.querySelector('.gauge-value');
+        if (!gaugeFg || !gaugeValue) return;
+
+        const radius = gaugeFg.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+        const offset = circumference - (value / maxValue) * circumference;
+        gaugeFg.style.strokeDashoffset = Math.max(0, Math.min(circumference, offset));
+
+        gaugeValue.textContent = value.toFixed(0);
+
+        const percentage = (value / maxValue) * 100;
+        let colorClass = 'normal';
+        if (percentage > 90) colorClass = 'danger';
+        else if (percentage > 75) colorClass = 'warning';
+
+        gaugeFg.classList.remove('stroke-normal', 'stroke-warning', 'stroke-danger');
+        gaugeValue.classList.remove('text-normal', 'text-warning', 'text-danger');
+        gaugeFg.classList.add(`stroke-${colorClass}`);
+        gaugeValue.classList.add(`text-${colorClass}`);
+    }
+
+    /**
+     * Creates a horizontal bar gauge component.
+     * @param {string} containerId - The ID of the element to contain the gauge.
+     * @param {string} label - The text label for the gauge.
+     * @param {string} units - The units for the gauge value.
+     * @param {number} maxValue - The maximum value for the gauge's scale.
+     */
+    function createBarGauge(containerId, label, units, maxValue) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = `
+            <h4 class="text-sm font-semibold text-slate-300">${label}</h4>
+            <div class="w-full bar-bg rounded-full h-2.5 my-2">
+                <div class="bar-fg bg-normal h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+            <div class="text-center">
+                <span class="bar-value text-2xl font-bold gauge-text text-normal">0</span>
+                <span class="bar-units text-xs text-slate-400">${units}</span>
+            </div>
+        `;
+    }
+
+    /**
+     * Updates an existing bar gauge component with a new value.
+     * @param {string} containerId - The ID of the gauge's container element.
+     * @param {number} value - The new value to display.
+     * @param {number} maxValue - The maximum value of the gauge's scale.
+     */
+    function updateBarGauge(containerId, value, maxValue) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const barFg = container.querySelector('.bar-fg');
+        const barValue = container.querySelector('.bar-value');
+        if (!barFg || !barValue) return;
+
+        const absValue = Math.abs(value);
+        const percentage = Math.min(100, (absValue / maxValue) * 100);
+        barFg.style.width = `${percentage}%`;
+        barValue.textContent = value.toFixed(0);
+
+        let colorClass = 'normal';
+        if (percentage > 90) colorClass = 'danger';
+        else if (percentage > 75) colorClass = 'warning';
+
+        barFg.classList.remove('bg-normal', 'bg-warning', 'bg-danger');
+        barValue.classList.remove('text-normal', 'text-warning', 'text-danger');
+        barFg.classList.add(`bg-${colorClass}`);
+        barValue.classList.add(`text-${colorClass}`);
+    }
+
+
     // --- DATA STORE (Expanded Sample Data for Simulation) ---
     const wellData = [
         { 
-            id: 'W666', 
-            name: 'The Well From Hell',
-            api: '666',
-            field: 'Devils Basin', 
+            id: 'M-21', 
+            name: 'The Montrose Squeeze',
+            field: 'Montrose', 
             region: 'UKCS', 
             type: 'HPHT Gas Condensate', 
-            depth: '18,500ft', 
-            status: 'Active - Restored Production', 
-            issue: 'Well brought back online after successful AI-guided fishing and tubing repair campaign.', 
+            depth: '9,000ft', 
+            status: 'Shut-in - Well Integrity Issues', 
+            issue: 'Casing deformation at 8,500ft preventing well access.', 
             history: [ 
-                { date: '2026-05-22', operation: 'Coiled Tubing: Milling Operation', problem: 'Ran 2-3/8" CT with a high-torque motor and mill to clear the obstruction. Motor stalled repeatedly. Aggressive milling parameters led to coiled tubing fatigue and a pipe fracture. CT parted at 11,800ft.', lesson: 'CT fatigue must be tracked meticulously in real-time. Milling in HPHT wells without clear visuals is a high-risk gamble. The default response should not be more force.' },
-                { date: '2026-08-01', operation: 'Wireline: Complex Fishing Operation', problem: 'Ran a wireline fishing toolstring to latch onto the parted CT. The high deviation and debris in the well prevented a successful latch. After 72 hours of attempts, the wireline tools became hopelessly tangled with the coiled tubing fish.', lesson: 'A consolidated, single source of truth detailing all previous runs (including tool dimensions and debris) is critical before designing a fishing BHA. The vendor-provided fishing diagram was based on incomplete data.' },
-                { date: '2027-01-15', operation: 'Pumping & Cementing: Attempted Well Kill', problem: 'Attempted to pump kill-weight mud to secure the well for further operations. Due to suspected tubing-to-annulus communication from the milling damage, there was a complete loss of returns and H2S ingress to the B-annulus.', lesson: 'Well integrity must be fully diagnosed via pressure fall-off tests *before* any pumping operation. Assumed integrity of the production tubing was the critical failure point.' },
-                { date: '2027-08-10', operation: 'Well-Tegra AI-Guided Intervention', problem: 'Final attempt to recover well before full P&A. A new intervention plan was designed using the Well-Tegra platform, leveraging data from the entire asset pool.', lesson: 'By analyzing failures on other wells, the AI recommended a multi-stage approach: a high-viscosity cleanout run, followed by a specialized cutting tool, and finally a heavy-duty overshot to retrieve both fish. The operation was successful, saving the well and proving the value of the Well-Tegra data pool.' }
+                { date: '2023-11-10', operation: 'Slickline Surveillance', problem: 'Standard 2.313" OD toolstring unable to pass 8,500ft, encountering a hard stop.', lesson: 'Significant reservoir depletion in this area is causing geomechanical stresses leading to casing deformation, a known regional risk. MFC log from well A-12 confirms this is ovalization, not collapse.' }
             ], 
-            dailyReports: [ 
-                { date: '2026-08-04', summary: 'Day 3 of fishing for CT. Unable to get a latch. Jarring operations ceased. Decision made to POOH and reconsider strategy. Fish (CT) and fish (Wireline tools) now both left in hole. Well status downgraded to severe integrity risk.', npt: 24.0, toolstringRun: ['Rope Socket', 'Stem', 'Spang Jars', 'CT Overshot'] }, 
-                { date: '2027-08-12', summary: 'Day 2 of AI-guided intervention. Successfully retrieved tangled fish. Now preparing to run tubing patch.', npt: 0.0, toolstringRun: ['Heavy Duty Rope Socket', 'Accelerator', 'Hydraulic Jars', 'Heavy Duty Pulling Tool', 'Specialized Overshot'] } 
-            ], 
+            dailyReports: [], 
             completion: { 
-                casing: [
-                    {type: 'Conductor', size: '30', top: 0, bottom: 500}, 
-                    {type: 'Surface', size: '20', top: 0, bottom: 2500}, 
-                    {type: 'Intermediate', size: '13 3/8', top: 0, bottom: 9500},
-                    {type: 'Production Liner', size: '9 5/8', top: 9200, bottom: 15000}
-                ], 
-                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 17800}], 
-                equipment: [
-                    {item: 'Tubing Patch', top: 12450, comments: 'High-expansion metal patch', isProblem: false},
-                    {item: 'SSSV', top: 12500, comments: 'TRSSSV, Functioning', isProblem: false}, 
-                    {item: 'Permanent Packer', top: 17750, comments: 'HPHT Permanent Packer'},
-                    {item: 'Hades Shale Formation', top: 14000, comments: 'Highly Stressed', isProblem: true}
-                ], 
-                perforations: [{top: 18000, bottom: 18250, date: '2025-07-10'}] 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 9000, isProblem: true}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 8800}], 
+                equipment: [{item: 'SSSV', top: 1500}, {item: 'Packer', top: 8750}, {item: 'Casing Deformation', top: 8500, comments: 'Ovalization', isProblem: true}], 
+                perforations: [{top: 8850, bottom: 8950}] 
             } 
         },
         { 
-            id: 'W001', 
-            name: 'Gullfaks C-34', 
-            field: 'Gullfaks', 
-            region: 'Norwegian Sector', 
-            type: 'Oil Producer', 
-            depth: '2,850m', 
-            status: 'Active - Underperforming', 
-            issue: 'Suspected scale buildup in tubing.', 
-            history: [ 
-                { date: '2020-10-03', operation: 'Scale Inhibitor Squeeze', problem: 'Pumping failure led to 12 hours of NPT due to a faulty valve on the cementing unit.', lesson: 'Third-party equipment maintenance records must be integrated into the job planning phase.' },
-                { date: '2024-02-20', operation: 'Coiled Tubing Scale Cleanout', problem: 'Motor stalled multiple times due to unexpectedly hard scale. The fluid system was unable to efficiently lift the large volume of debris, causing a pack-off scare.', lesson: 'Real-time downhole data (pressure, temperature, motor RPM) is essential for intervention effectiveness. The job should have been stopped earlier based on poor returns.' }
-            ], 
-            dailyReports: [ { date: '2024-02-20', summary: 'RIH with CT and motor. Encountered hard scale. Stalled motor 3 times. Circulated high-vis sweeps to clean hole. POOH slowly. Job took 12 hours longer than planned.', npt: 12.0, toolstringRun: ['CT Connector', 'Dual-Flapper Check Valve', 'Hydraulic Disconnect', 'High-Torque Motor', 'Scale Mill'] } ], 
-            completion: { casing: [{type: 'Surface', size: '13 3/8', top: 0, bottom: 800}, {type: 'Production', size: '9 5/8', top: 0, bottom: 2850}], tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 2750}], equipment: [{item: 'SSSV', top: 1200, comments: 'TRSSSV, Flapper'}, {item: 'Packer', top: 2700, comments: 'Hydraulic Set'}, {item: 'Scale Buildup', top: 2300, comments: 'Suspected from history', isProblem: true}], perforations: [{top: 2800, bottom: 2820, date: '2019-03-10'}] } 
-        },
-        { 
-            id: 'W002', 
-            name: 'Statfjord A-12', 
-            field: 'Statfjord', 
-            region: 'Norwegian Sector', 
-            type: 'Water Injector', 
-            depth: '3,100m', 
-            status: 'Active - Low Injectivity', 
-            issue: 'Possible perforation plugging.', 
-            history: [ 
-                { date: '2023-01-20', operation: 'Coiled Tubing Acid Wash', problem: 'Incorrect acid concentration mixed initially. Wrong valve opened on chemical skid.', lesson: 'Implement a digital, step-by-step checklist with valve confirmations before starting any pumping job. Human error in mixing is a common, preventable NPT cause.' },
-                { date: '2024-04-11', operation: 'Production Logging (Wireline)', problem: 'Logging tool string became stuck at 2,900m. Jarring was unsuccessful. Had to perform a "cut and thread" fishing operation to retrieve the tool.', lesson: 'Wellbore tortuosity data was not consulted prior to the job. A rigid toolstring was run into a high-angle section, causing the hangup. The risk could have been flagged automatically.' }
-            ], 
-            dailyReports: [ { date: '2024-04-12', summary: 'Successfully fished PLT string after 36 hours of continuous operations. Significant NPT incurred. Wellbore is clear but injectivity issue remains unresolved.', npt: 36.0, toolstringRun: ['Rope Socket', 'Stem', 'Jars', 'Wireline Cutter', 'Rope-Socket Overshot'] } ], 
-            completion: { casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 3100}], tubing: [{type: 'Injection', size: '4 1/2', top: 0, bottom: 3000}], equipment: [{item: 'Packer', top: 2950, comments: 'Hydraulic Set'}], perforations: [{top: 3050, bottom: 3080, date: '2017-05-20', comments: 'Partially plugged', isProblem: true}] } 
-        },
-        { 
-            id: 'W003', 
-            name: 'Oseberg B-21', 
-            field: 'Oseberg', 
-            region: 'Norwegian Sector', 
-            type: 'Gas Producer', 
-            depth: '2,500m', 
+            id: 'S-15', 
+            name: 'The Scale Trap',
+            field: 'Montrose', 
+            region: 'UKCS', 
+            type: 'HPHT Gas Condensate', 
+            depth: '11,000ft', 
             status: 'Shut-in - Well Integrity Issues', 
-            issue: 'Suspected downhole safety valve failure.', 
+            issue: 'Severe BaSO4 scale blockage in tubing causing >90% production loss.', 
             history: [ 
-                { date: '2021-08-05', operation: 'Routine DHSV Test (Slickline)', problem: 'Valve failed to close on first attempt. Required multiple cycles to eventually close. Indicated hydraulic leak in control line or failing valve internals.', lesson: 'DHSV test failures should automatically trigger a "Well Integrity" flag and schedule a mandatory diagnostic run, not just a "monitor" recommendation.' },
-                { date: '2023-09-14', operation: 'Slickline: Attempted DHSV Lock-Open', problem: 'Ran lock-open tool. Tool sheared prematurely due to debris in the control line, leaving a new fish on top of the already faulty DHSV.', lesson: 'A simple control line flush was missed in the procedure. This highlights a failure in planning and assessing prerequisite tasks. The cost of this error is an order of magnitude higher than the cost of the flush.' }
+                { date: '2024-01-05', operation: 'Production Logging', problem: 'PLT toolstring unable to pass 9,200ft due to a hard obstruction. Produced water analysis confirmed high Barium and Sulfate content.', lesson: 'Commingling of injected seawater and formation water is causing severe, insoluble scale deposition. A previous attempt to mill scale on well A-14 resulted in stuck pipe due to poor solids removal; a chemical/jetting approach is safer.' }
             ], 
-            dailyReports: [ { date: '2023-09-14', summary: 'Sheared pin on DHSV lock-open tool. Unable to retrieve. Well is now shut-in with an inoperable DHSV and a fish in the hole.', npt: 8.0, toolstringRun: ['Rope Socket', 'Stem', 'Spang Jars', 'Running Tool', 'DHSV Lock-Open Prong'] } ], 
-            completion: { casing: [{type: 'Production', size: '7', top: 0, bottom: 2500}], tubing: [{type: 'Production', size: '3 1/2', top: 0, bottom: 2400}], equipment: [{item: 'Lock-Open Tool Fish', top: 995, comments: 'Sheared tool', isProblem: true}, {item: 'SSSV', top: 1000, comments: 'Failed to close on test', isProblem: true}, {item: 'Packer', top: 2350, comments: 'Mechanical Set'}], perforations: [{top: 2450, bottom: 2480, date: '2018-01-15'}] } 
+            dailyReports: [], 
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 11000}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 10800}], 
+                equipment: [{item: 'SSSV', top: 1800}, {item: 'Packer', top: 10750}, {item: 'BaSO4 Scale Bridge', top: 9200, comments: 'Solid blockage', isProblem: true}], 
+                perforations: [{top: 10850, bottom: 10950}] 
+            } 
         },
         { 
-            id: 'W004', 
-            name: 'Halfdan D-5', 
-            field: 'Halfdan', 
-            region: 'Danish Sector', 
-            type: 'Oil Producer', 
-            depth: '2,200m', 
-            status: 'P&A Candidate', 
-            issue: 'High water cut; uneconomical production.', 
+            id: 'C-08', 
+            name: 'The Sandstorm',
+            field: 'Montrose', 
+            region: 'UKCS', 
+            type: 'HPHT Gas Condensate', 
+            depth: '10,000ft', 
+            status: 'Active - Underperforming', 
+            issue: 'Failed sand screen causing excessive sand production and choked-back rates.', 
             history: [ 
-                { date: '2022-09-18', operation: 'Zonal Isolation Evaluation (Wireline)', problem: 'Logging tool failed downhole due to high temperature. The tool selected was not rated for the BHT of the well, an error in the planning phase.', lesson: 'Equipment specifications (temp/pressure rating) must be cross-referenced against well parameters automatically. This was a preventable human error.' },
-                { date: '2024-01-20', operation: 'P&A: Set Bridge Plug (Wireline)', problem: 'Set bridge plug, but it failed a pressure test. The casing was found to be more corroded than historical records indicated. Plug had to be milled out.', lesson: 'Legacy data from drilling (e.g., caliper logs) must be easily accessible during intervention planning. The data existed but was buried in a PDF in an old system.' }
+                { date: '2023-08-15', operation: 'Surface Choke Replacement', problem: 'Replaced choke for the 3rd time in 6 months due to severe erosional wear from high sand content.', lesson: 'Choking back the well is a temporary fix; the root cause of sand control failure must be addressed. Downhole video from well F-32 showed screen erosion, confirming a through-tubing patch is a viable rigless repair.' }
             ], 
-            dailyReports: [ { date: '2022-09-18', summary: 'Attempted to run CBL/VDL log. Tool failed at 2100m due to temperature. POOH. NPT for the day.', npt: 6.0, toolstringRun: ['Rope Socket', 'CCL', 'Cement Bond Log Tool', 'VDL Tool'] } ], 
-            completion: { casing: [{type: 'Surface', size: '13 3/8', top: 0, bottom: 500}, {type: 'Production', size: '9 5/8', top: 0, bottom: 2200, comments: 'Corrosion noted in last report', isProblem: true}], plugs: [] } 
+            dailyReports: [], 
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 10000}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 9800}], 
+                equipment: [{item: 'SSSV', top: 1600}, {item: 'Packer', top: 9750}, {item: 'Standalone Sand Screen', top: 9850, comments: 'Eroded holes', isProblem: true}], 
+                perforations: [{top: 9850, bottom: 9950}] 
+            } 
         },
+        { 
+            id: 'W-04', 
+            name: 'The Water Log',
+            field: 'Montrose', 
+            region: 'UKCS', 
+            type: 'HPHT Gas Condensate', 
+            depth: '9,500ft', 
+            status: 'Shut-in', 
+            issue: 'Excessive water production (>80% water cut) from lower zone due to water breakthrough.', 
+            history: [ 
+                { date: '2024-03-01', operation: 'Production Logging', problem: 'PLT survey confirmed >95% of water is entering from the lower perforated interval. Upper zone is still producing oil.', lesson: 'Rising oil-water contact has breached the lower zone. A similar operation on P-22 showed that a CIBP alone was insufficient; a cement cap is required for long-term isolation.' }
+            ], 
+            dailyReports: [], 
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 9500}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 9300}], 
+                equipment: [{item: 'SSSV', top: 1400}, {item: 'Packer', top: 9250}], 
+                perforations: [{top: 9000, bottom: 9100, comments: 'Upper Zone (Oil)'}, {top: 9350, bottom: 9450, comments: 'Lower Zone (Water)', isProblem: true}] 
+            } 
+        },
+        { 
+            id: 'F-11', 
+            name: 'The Broken Barrier',
+            field: 'Montrose', 
+            region: 'UKCS', 
+            type: 'HPHT Gas Condensate', 
+            depth: '9,800ft', 
+            status: 'Shut-in - Well Integrity Issues', 
+            issue: 'Failed Tubing-Retrievable Subsurface Safety Valve (TRSSV).', 
+            history: [ 
+                { date: '2024-02-18', operation: 'Routine DHSV Test', problem: 'Valve failed to close reliably during routine 6-month test. Well was mandatorily shut-in by regulatory authority.', lesson: 'Internal mechanical failure of the TRSSV requires a rigless intervention. A previous job on F-09 used a hydraulic lock-open tool which failed; a more reliable mechanical tool is recommended.' }
+            ], 
+            dailyReports: [], 
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 9800}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 9600}], 
+                equipment: [{item: 'SSSV', top: 1500, comments: 'Failed test', isProblem: true}, {item: 'Packer', top: 9550}], 
+                perforations: [{top: 9650, bottom: 9750}] 
+            } 
+        },
+        { 
+            id: 'F-45', 
+            name: 'The Dead Spark',
+            field: 'Forties', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '8,000ft', 
+            status: 'Shut-in - Well Integrity Issues', 
+            issue: 'Failed Electric Submersible Pump (ESP) and high water cut.', 
+            history: [ 
+                { date: '2023-10-20', operation: 'ESP Monitoring', problem: 'ESP amperage dropped to zero, and production ceased. Well is now shut-in.', lesson: 'ESP failure requires a full workover. A recent workover on F-42 using a hydraulic workover unit (HWU) was 30% cheaper than a rig-based operation, proving the cost-effectiveness of a rigless approach.' }
+            ], 
+            dailyReports: [], 
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 8000}], 
+                tubing: [{type: 'Production', size: '5 1/2', top: 0, bottom: 7800}], 
+                equipment: [{item: 'ESP', top: 7500, comments: 'Failed', isProblem: true}, {item: 'Packer', top: 7750}], 
+                perforations: [{top: 7850, bottom: 7950}] 
+            } 
+        },
+        { 
+            id: 'P-12', 
+            name: 'The Wax Plug',
+            field: 'Piper', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '7,500ft', 
+            status: 'Active - Underperforming', 
+            issue: 'Severe paraffin wax blockage in tubing restricting flow.', 
+            history: [ 
+                { date: '2024-01-15', operation: 'Slickline Gauge Ring Run', problem: 'Gauge ring tagged a soft, waxy obstruction at 6,000ft. Unable to pass.', lesson: 'Paraffin deposition requires a combined chemical and mechanical intervention. A CT job on P-10 using only chemicals was slow and ineffective; adding a scraper tool on a subsequent run was key to success.' }
+            ], 
+            dailyReports: [], 
+            completion: { 
+                casing: [{type: 'Production', size: '7', top: 0, bottom: 7500}], 
+                tubing: [{type: 'Production', size: '3 1/2', top: 0, bottom: 7300}], 
+                equipment: [{item: 'SSSV', top: 1200}, {item: 'Packer', top: 7250}, {item: 'Wax Deposit', top: 6000, comments: 'Blockage', isProblem: true}], 
+                perforations: [{top: 7350, bottom: 7450}] 
+            } 
+        },
+        // --- NEW CASE HISTORY WELLS ---
+        { 
+            id: 'A-12', 
+            name: 'The Arbroath Anomaly',
+            field: 'Arbroath', 
+            region: 'UKCS', 
+            type: 'Gas Condensate', 
+            depth: '9,200ft', 
+            status: 'Active - Restored Production', 
+            issue: 'Previously had restricted access due to casing deformation.', 
+            history: [ 
+                { date: '2022-05-20', operation: 'Wireline MFC Logging', problem: 'Unable to pass standard tools below 8,450ft.', lesson: 'Multi-Finger Caliper (MFC) log clearly identified casing ovalization, not collapse, allowing for a targeted rigless solution.' },
+                { date: '2022-06-15', operation: 'Expandable Patch Installation', problem: 'Successfully installed a 40ft expandable steel patch across the deformed section.', lesson: 'Expandable patches are a proven, cost-effective method to restore full-bore access in cases of casing ovalization without requiring a full workover.' }
+            ], 
+            dailyReports: [
+                { date: '2022-05-20', summary: 'RIH with Wireline MFC toolstring. Tagged obstruction at 8,452ft. Worked tool past obstruction. Logged from 8,600ft to 8,400ft. Data confirms ovalization (max ID 4.8", min ID 3.9") but no collapse. POOH.', npt: 0, toolstringRun: ['Rope Socket', 'Stem', 'Jars', 'CCL', 'Gamma Ray', 'Multi-Finger Caliper'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 9200}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 9000}], 
+                equipment: [{item: 'SSSV', top: 1400}, {item: 'Packer', top: 8950}, {item: 'Tubing Patch', top: 8450, comments: 'Restored ID', isProblem: false}], 
+                perforations: [{top: 9050, bottom: 9150}] 
+            } 
+        },
+        { 
+            id: 'A-14', 
+            name: 'The Fishing Trip',
+            field: 'Arbroath', 
+            region: 'UKCS', 
+            type: 'Gas Condensate', 
+            depth: '11,500ft', 
+            status: 'P&A Candidate', 
+            issue: 'Lost milling BHA in hole during scale removal attempt.', 
+            history: [ 
+                { date: '2021-09-10', operation: 'Coiled Tubing Milling', problem: 'Attempted to mill hard BaSO4 scale. CT motor stalled and became stuck due to inadequate circulation of milled solids.', lesson: 'Aggressive mechanical milling of hard scale without sufficient hydraulic energy for hole cleaning is a high-risk operation. A chemical pre-treatment to soften the scale is critical.' }
+            ], 
+            dailyReports: [
+                 { date: '2021-09-10', summary: 'RIH with CT milling BHA to 9,150ft. Began milling scale. After 2 hours, motor stalled and overpull increased significantly. Unable to free toolstring. Sheared CT weak link. POOH with CT, leaving BHA in hole. Well now contains a fish.', npt: 12, toolstringRun: ['CT Connector', 'Dual Flapper Check Valve', 'Hydraulic Disconnect', 'High-Torque Motor', 'Scale Mill'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 11500}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 11300}], 
+                equipment: [{item: 'SSSV', top: 1800}, {item: 'Packer', top: 11250}, {item: 'BaSO4 Scale Bridge', top: 9150, isProblem: true}, {item: 'Fish', top: 9150, comments: 'Milling BHA', isProblem: true}], 
+                perforations: [{top: 11350, bottom: 11450}] 
+            } 
+        },
+        { 
+            id: 'F-32', 
+            name: 'The Forties Fix',
+            field: 'Forties', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '10,200ft', 
+            status: 'Active - Restored Production', 
+            issue: 'Previously failed sand screen, now repaired.', 
+            history: [ 
+                { date: '2023-01-20', operation: 'Downhole Video Log', problem: 'Confirmed sand screen was eroded and had failed, not plugged.', lesson: 'Visual confirmation of the failure mode is essential before planning a remediation. It prevents costly attempts to clean a screen that actually needs to be patched or replaced.' },
+                { date: '2023-02-18', operation: 'Through-Tubing Sand Screen Patch', problem: 'Successfully installed an expandable sand screen patch across the failed interval.', lesson: 'Through-tubing expandable patches provide a viable, rigless solution for repairing failed sand screens, restoring sand control and allowing production to be increased.' }
+            ], 
+            dailyReports: [
+                 { date: '2023-01-20', summary: 'RIH with downhole video camera on wireline. Logged across sand screen interval from 9,800ft to 9,900ft. Clear footage shows multiple large holes and tears in the screen mesh. POOH.', npt: 0, toolstringRun: ['Rope Socket', 'Stem', 'Jars', 'CCL', 'Downhole Video Camera'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 10200}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 10000}], 
+                equipment: [{item: 'SSSV', top: 1600}, {item: 'Packer', top: 9950}, {item: 'Standalone Sand Screen', top: 9800, comments: 'Patched', isProblem: false}], 
+                perforations: [{top: 9800, bottom: 9900}] 
+            } 
+        },
+        { 
+            id: 'P-22', 
+            name: 'The Piper Plug',
+            field: 'Piper', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '9,600ft', 
+            status: 'Active - Restored Production', 
+            issue: 'Previously high water cut, now isolated.', 
+            history: [ 
+                { date: '2022-11-05', operation: 'Water Shut-Off Operation', problem: 'Set a CIBP at 9,400ft to isolate lower water zone. After bringing well online, water cut remained high.', lesson: 'A single mechanical bridge plug may not provide a sufficient long-term seal in this reservoir. A secondary cement cap is required to ensure hydraulic isolation.' }
+            ], 
+            dailyReports: [
+                 { date: '2022-11-05', summary: 'RIH on wireline and set CIBP at 9,400ft. Pressure tested plug successfully. POOH. Brought well online, but water cut only dropped from 90% to 75%. Shut well in for further planning.', npt: 4, toolstringRun: ['Rope Socket', 'Stem', 'Jars', 'CCL', 'Bridge Plug Setting Tool', 'CIBP'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 9600}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 9300}], 
+                equipment: [{item: 'SSSV', top: 1400}, {item: 'Packer', top: 9250}],
+                plugs: [{item: 'CIBP & Cement', top: 9350, bottom: 9450}],
+                perforations: [{top: 9000, bottom: 9100}, {top: 9450, bottom: 9550, comments: 'Isolated', isProblem: false}] 
+            } 
+        },
+        { 
+            id: 'F-09', 
+            name: 'The Failed Lock',
+            field: 'Forties', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '9,900ft', 
+            status: 'Shut-in - Well Integrity Issues', 
+            issue: 'Failed TRSSV. Attempted repair was unsuccessful.', 
+            history: [ 
+                { date: '2023-05-12', operation: 'Slickline Insert Valve Installation', problem: 'Attempted to lock open failed TRSSV using a hydraulic shifting tool. Tool failed to shift the valve sleeve.', lesson: 'Hydraulic shifting tools can be unreliable. A mechanical lock-open tool that provides positive feedback is a more robust option for locking open failed safety valves.' }
+            ], 
+            dailyReports: [
+                { date: '2023-05-12', summary: 'RIH with hydraulic shifting tool to TRSSV depth (1,550ft). Applied pressure multiple times but saw no indication of valve shifting. POOH. Inspected tool, no issues found. Operation failed.', npt: 8, toolstringRun: ['Rope Socket', 'Stem', 'Jars', 'Hydraulic Shifting Tool'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 9900}], 
+                tubing: [{type: 'Production', size: '4 1/2', top: 0, bottom: 9700}], 
+                equipment: [{item: 'SSSV', top: 1550, comments: 'Failed test', isProblem: true}, {item: 'Packer', top: 9650}], 
+                perforations: [{top: 9750, bottom: 9850}] 
+            } 
+        },
+        { 
+            id: 'F-42', 
+            name: 'The Rigless Wonder',
+            field: 'Forties', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '8,100ft', 
+            status: 'Active - Restored Production', 
+            issue: 'Previously failed ESP, replaced without a rig.', 
+            history: [ 
+                { date: '2022-08-20', operation: 'ESP Replacement via HWU', problem: 'Successfully pulled and replaced a failed ESP using a Hydraulic Workover Unit (HWU).', lesson: 'For shallow ESP change-outs (<10,000ft), a rigless HWU operation can be significantly faster and more cost-effective than mobilizing a traditional workover rig.' }
+            ], 
+            dailyReports: [
+                 { date: '2022-08-20', summary: 'Rigged up HWU. Killed well. POOH with old completion and failed ESP. RIH with new ESP and tubing. Landed completion, nippled down HWU. Brought well online. Total operation time: 12 days.', npt: 24, toolstringRun: ['N/A - HWU Operation'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '9 5/8', top: 0, bottom: 8100}], 
+                tubing: [{type: 'Production', size: '5 1/2', top: 0, bottom: 7900}], 
+                equipment: [{item: 'ESP', top: 7600, comments: 'New', isProblem: false}, {item: 'Packer', top: 7850}], 
+                perforations: [{top: 7950, bottom: 8050}] 
+            } 
+        },
+        { 
+            id: 'P-10', 
+            name: 'The Slow Dissolve',
+            field: 'Piper', 
+            region: 'UKCS', 
+            type: 'Oil Producer', 
+            depth: '7,800ft', 
+            status: 'Active - Underperforming', 
+            issue: 'Partial success in paraffin wax removal.', 
+            history: [ 
+                { date: '2023-03-10', operation: 'Coiled Tubing Chemical Wash', problem: 'Pumped heated solvent across waxy interval. Production only increased by 50%, indicating significant wax remained.', lesson: 'Soaking with chemicals alone is often insufficient for severe wax blockages. A follow-up mechanical run with a scraper or brush is necessary to clear remaining deposits.' }
+            ], 
+            dailyReports: [
+                { date: '2023-03-10', summary: 'RIH with CT to 6,500ft. Spotted heated wax dissolver chemical. POOH. After 12hr soak, well production only marginally improved. Plan for mechanical cleanout.', npt: 2, toolstringRun: ['CT Connector', 'Dual Flapper Check Valve', 'Nozzle'] }
+            ],
+            completion: { 
+                casing: [{type: 'Production', size: '7', top: 0, bottom: 7800}], 
+                tubing: [{type: 'Production', size: '3 1/2', top: 0, bottom: 7600}], 
+                equipment: [{item: 'SSSV', top: 1200}, {item: 'Packer', top: 7550}, {item: 'Wax Deposit', top: 6200, comments: 'Partially cleared', isProblem: true}], 
+                perforations: [{top: 7650, bottom: 7750}] 
+            } 
+        }
     ];
     const objectivesData = [ 
-        { id: 'obj1', name: 'Production Enhancement', description: 'Intervention to increase hydrocarbon flow rate.' }, 
-        { id: 'obj2', name: 'Water Shut-off', description: 'Isolate water-producing zones to reduce water cut.' }, 
-        { id: 'obj3', name: 'Well Integrity Restoration', description: 'Repair or replace failed downhole components.' }, 
-        { id: 'obj4', name: 'Plug & Abandonment', description: 'Permanently seal the wellbore.' },
-        { id: 'obj5', name: 'AI-Guided Fishing & Repair', description: 'Execute a complex, data-driven plan to recover fish and restore production.' }
+        { id: 'obj1', name: 'Remediate Casing Deformation', description: 'Install an expandable steel patch to restore wellbore access.' }, 
+        { id: 'obj2', name: 'Remove BaSO4 Scale', description: 'Use a chemical and mechanical method to clear tubing blockage.' }, 
+        { id: 'obj3', name: 'Repair Sand Control', description: 'Install a through-tubing expandable sand screen patch.' }, 
+        { id: 'obj4', name: 'Water Shut-Off', description: 'Set a dual-barrier plug to isolate the water-producing zone.' },
+        { id: 'obj5', name: 'Restore Downhole Safety Valve', description: 'Lock open the failed TRSSV and install a new insert valve.' },
+        { id: 'obj6', name: 'ESP Replacement', description: 'Perform a rigless workover to replace a failed ESP.' },
+        { id: 'obj7', name: 'Paraffin Wax Removal', description: 'Use CT with chemicals and tools to remove wax blockage.' }
     ];
     const problemsData = [ 
-        { id: 'prob1', name: 'Production Decline / Low Injectivity', description: 'Well performance is below expected levels.', linked_objectives: ['obj1'] }, 
-        { id: 'prob2', name: 'Well Integrity Concern', description: 'Suspected failure of a downhole component (e.g., DHSV, packer).', linked_objectives: ['obj3'] }, 
-        { id: 'prob3', name: 'End of Life / Uneconomical', description: 'Well is no longer commercially viable.', linked_objectives: ['obj4', 'obj2'] },
-        { id: 'prob4', name: 'Complex Wellbore Obstruction / Fish', description: 'Multiple fish in hole with suspected tubing/casing integrity failure.', linked_objectives: ['obj5', 'obj4'] }
+        { id: 'prob1', name: 'Loss of Well Access (Casing Deformation)', description: 'Wellbore is restricted due to geomechanical forces.', linked_objectives: ['obj1'] }, 
+        { id: 'prob2', name: 'Severe Scale Blockage', description: 'Production is blocked by hard, insoluble scale.', linked_objectives: ['obj2'] }, 
+        { id: 'prob3', name: 'Sand Control Failure', description: 'Excessive sand production is damaging equipment and limiting rates.', linked_objectives: ['obj3'] },
+        { id: 'prob4', name: 'Excessive Water Production', description: 'Water breakthrough in a lower zone has killed the well.', linked_objectives: ['obj4'] },
+        { id: 'prob5', name: 'Failed Primary Safety Barrier (DHSV)', description: 'Well is legally shut-in due to a failed safety valve.', linked_objectives: ['obj5'] },
+        { id: 'prob6', name: 'Failed Artificial Lift (ESP)', description: 'Well is shut-in due to a failed downhole pump.', linked_objectives: ['obj6'] },
+        { id: 'prob7', name: 'Flow Assurance Blockage (Wax)', description: 'Production is severely restricted by paraffin deposits.', linked_objectives: ['obj7'] }
     ];
     const aiRecommendations = {
         prob1: [ 
-            { objectiveId: 'obj1', confidence: 92, outcome: '+250 bopd uplift', reason: 'Analysis of anonymized operational patterns from <strong>Gullfaks C-34 (W001)</strong> indicates a high success rate for acid stimulation in this formation type.' } 
+            { objectiveId: 'obj1', confidence: 95, outcome: 'Full-bore access restored', reason: 'Analysis of MFC log data from well <strong>A-12</strong> confirms an expandable steel patch is the standard, high-success-rate rigless solution for this failure mode.' } 
         ],
         prob2: [ 
-            { objectiveId: 'obj3', confidence: 88, outcome: 'Restore well to safe operational state', reason: 'Log data indicates likely DHSV failure. The anonymized operational patterns from the tool failure on <strong>Oseberg B-21 (W003)</strong> highlights the need for a pre-job control line flush, which will be added to the procedure.' }, 
-            { objectiveId: 'obj4', confidence: 65, outcome: 'Permanently secure well', reason: 'P&A is a secondary option if integrity restoration is not feasible. The casing corrosion issues on <strong>Halfdan D-5 (W004)</strong> suggest a full casing integrity log should be run first.' } 
+            { objectiveId: 'obj2', confidence: 90, outcome: 'Blockage cleared, production restored', reason: 'Water analysis confirms BaSO4. A two-stage chemical (DTPA) and mechanical (jetting) intervention has a high success rate. Pre-job CT modeling is mandatory to prevent stuck pipe, a lesson learned from the failed milling job on <strong>A-14</strong>.' } 
         ],
         prob3: [ 
-            { objectiveId: 'obj4', confidence: 95, outcome: 'Well permanently abandoned per regulations', reason: 'Well is a clear P&A candidate based on economic limit test and referencing the P&A challenges on <strong>Halfdan D-5 (W004)</strong>.' }, 
-            { objectiveId: 'obj2', confidence: 55, outcome: 'Reduce water cut by 40%', reason: 'Water shut-off may extend well life, but has lower confidence of economic success based on similar zonal isolation jobs.' } 
+            { objectiveId: 'obj3', confidence: 85, outcome: 'Sand-free production at >80% potential', reason: 'Downhole video from <strong>F-32</strong> confirms screen failure is common in this area. A through-tubing expandable sand screen is the optimal rigless solution. Material must be upgraded to a corrosion-resistant alloy.' } 
         ],
         prob4: [
-            { objectiveId: 'obj5', confidence: 95, outcome: 'Fish recovered and well online', reason: 'This plan is generated by analyzing the entire data pool. Anonymized patterns from the failed fishing job on <strong>Statfjord A-12 (W002)</strong> mandate a pre-job cleanout. The successful milling on <strong>Gullfaks C-34 (W001)</strong> provides the optimal parameters for a cutting run. Finally, the tool failure on <strong>Oseberg B-21 (W003)</strong> informs the selection of a more robust, heavy-duty fishing assembly.'},
-            { objectiveId: 'obj4', confidence: 98, outcome: 'Permanently secure wellbore', reason: 'Safest option. Given the multiple integrity failures and tangled fish, referencing the P&A challenges on <strong>Halfdan D-5 (W004)</strong> and the cementing failures on this well, a complex section milling and plugging operation is the surest path to permanent abandonment.'}
+            { objectiveId: 'obj4', confidence: 98, outcome: 'Water production eliminated, oil production restored', reason: 'PLT data is definitive. The failed single-plug job on <strong>P-22</strong> proves a dual-barrier CIBP and cement plug is the most robust long-term isolation method.'}
+        ],
+        prob5: [
+            { objectiveId: 'obj5', confidence: 99, outcome: 'Well returned to safe, compliant production', reason: 'This is a standard slickline operation. The key is using a reliable mechanical lock-open tool to avoid the procedural failures seen on <strong>F-09</strong>.'}
+        ],
+        prob6: [
+            { objectiveId: 'obj6', confidence: 92, outcome: 'Well returned to production with new ESP', reason: 'ESP failure is confirmed by telemetry. The successful operation on <strong>F-42</strong> demonstrates a rigless hydraulic workover unit is the most cost-effective solution for replacement.'}
+        ],
+        prob7: [
+            { objectiveId: 'obj7', confidence: 88, outcome: 'Wax blockage removed, production increased by >400%', reason: 'Slickline tag confirms a soft blockage. The partial success on <strong>P-10</strong> shows a Coiled Tubing intervention with both heated chemical dissolvers and a mechanical scraper tool is the recommended procedure.'}
         ]
     };
     const proceduresData = {
-        obj1: { name: "Coiled Tubing Acid Stimulation", personnel: ["Coiled Tubing Supervisor", "Pump Operator", "Wellsite Engineer"], steps: ["Hold pre-job safety meeting & TBT.", "Confirm all PTW are approved.", "Rig up Coiled Tubing unit and PCE.", "Pressure test PCE to 5000 psi.", "Run in hole (RIH) to 9,500 ft.", "Spot 50 bbls of 15% HCl acid.", "Pull out of hole (POOH) to surface.", "Flow back well and monitor returns.", "Rig down equipment."], risks: { operational: 4, geological: 3, equipment: 3, hse: 4, financial: 2 }, cost: 750000, duration: 5, tfaModel: { pickUp: [[0,0], [9500, 25]], slackOff: [[0,0], [9500, -25]], alarmUpper: [[0,2], [9500, 27]], alarmLower: [[0,-2], [9500, -27]] } },
-        obj2: { name: "Mechanical Plug Installation", personnel: ["Wireline Supervisor", "Wireline Operator"], steps: ["Hold pre-job safety meeting & TBT.", "Confirm all PTW are approved.", "Rig up Wireline unit.", "Run in hole with gauge ring.", "Run in hole with bridge plug and set at target depth.", "Dump bail cement on top of plug.", "Pressure test to confirm seal.", "Rig down equipment."], risks: { operational: 3, geological: 2, equipment: 3, hse: 3, financial: 1 }, cost: 325000, duration: 3, tfaModel: { pickUp: [[0,0], [9500, 10]], slackOff: [[0,0], [9500, -10]], alarmUpper: [[0,1], [9500, 11]], alarmLower: [[0,-1], [9500, -11]] } },
-        obj3: { name: "Slickline: DHSV Replacement", personnel: ["Slickline Supervisor", "Slickline Operator"], steps: ["Hold pre-job safety meeting & TBT.", "Confirm all PTW are approved.", "Rig up Slickline unit.", "Run in hole to equalize and retrieve failed DHSV insert.", "Run in hole with new DHSV insert and lock into place.", "Pressure test control line and valve.", "Function test valve.", "Rig down equipment."], risks: { operational: 4, geological: 1, equipment: 5, hse: 4, financial: 3 }, cost: 480000, duration: 5, tfaModel: { pickUp: [[0, 100], [9500, 150]], slackOff: [[0, 100], [9500, 50]], alarmUpper: [[0, 110], [9500, 160]], alarmLower: [[0, 90], [9500, 40]] } },
-        obj4: { name: "P&A - Section Milling & Plugging", personnel: ["Rig Supervisor", "Driller", "Derrickhand", "Floorhand"], steps: ["Hold pre-job safety meeting & TBT.", "Confirm all PTW are approved.", "Rig up workover rig.", "Mill section of casing to expose formation.", "Set balanced cement plug across milled section.", "Verify plug placement and integrity.", "Repeat for all required barriers.", "Rig down equipment."], risks: { operational: 5, geological: 4, equipment: 4, hse: 5, financial: 4 }, cost: 2500000, duration: 18, tfaModel: { pickUp: [[0,0], [5000, 50]], slackOff: [[0,0], [5000, -50]], alarmUpper: [[0,10], [5000, 60]], alarmLower: [[0,-10], [5000, -60]] } },
-        obj5: { name: "AI-Guided Fishing & Repair", personnel: ["Wellsite Engineer", "Coiled Tubing Supervisor", "Wireline Supervisor"], steps: ["Hold pre-job safety meeting & TBT.", "Confirm all PTW are approved.", "RIH with Coiled Tubing and circulate high-viscosity sweeps to clean debris.", "POOH Coiled Tubing.", "RIH with Wireline cutting tool to cut tangled fish.", "RIH with heavy-duty overshot to latch and retrieve fish.", "RIH with high-expansion tubing patch and set across damaged interval.", "Pressure test patch and bring well online."], risks: { operational: 5, geological: 3, equipment: 4, hse: 5, financial: 5 }, cost: 3200000, duration: 15, tfaModel: { pickUp: [[0,0], [12000, 40]], slackOff: [[0,0], [12000, -40]], alarmUpper: [[0,5], [12000, 45]], alarmLower: [[0,-5], [12000, -45]] } }
+        obj1: { name: "Expandable Casing Patch Installation", personnel: ["Wellsite Engineer", "HWU Supervisor"], steps: ["Perform wellbore cleanout trip with scraper and gauge ring.", "RIH with expandable patch on jointed pipe.", "Position patch across deformed interval using GR/CCL correlation.", "Set patch using hydraulic setting tool.", "Pressure test patch to verify seal.", "POOH and return well to service."], risks: { operational: 4, geological: 2, equipment: 4, hse: 3, financial: 3 }, cost: 1200000, duration: 8, tfaModel: { pickUp: [[0,0], [9000, 60]], slackOff: [[0,0], [9000, -60]], alarmUpper: [[0,10], [9000, 70]], alarmLower: [[0,-10], [9000, -70]] } },
+        obj2: { name: "CT Chemical & Mechanical Scale Removal", personnel: ["Coiled Tubing Supervisor", "Pump Operator"], steps: ["RIH with CT and spot DTPA chemical dissolver across scale.", "POOH with CT and let chemical soak for 36 hours.", "RIH with CT and rotating jetting BHA.", "Mechanically break up and circulate out softened scale.", "Circulate well clean and POOH.", "Return well to production."], risks: { operational: 5, geological: 2, equipment: 4, hse: 4, financial: 3 }, cost: 950000, duration: 6, tfaModel: { pickUp: [[0,0], [9500, 25]], slackOff: [[0,0], [9500, -25]], alarmUpper: [[0,2], [9500, 27]], alarmLower: [[0,-2], [9500, -27]] } },
+        obj3: { name: "Through-Tubing ESS Patch Installation", personnel: ["Wellsite Engineer", "HWU Supervisor"], steps: ["Perform CT cleanout of sand from inside existing screen.", "RIH with Expandable Sand Screen (ESS) patch on jointed pipe.", "Position patch across failed screen interval.", "Expand patch using mechanical expansion tool.", "POOH and slowly bring well back online, monitoring sand production."], risks: { operational: 4, geological: 3, equipment: 5, hse: 3, financial: 4 }, cost: 1500000, duration: 10, tfaModel: { pickUp: [[0,0], [10000, 50]], slackOff: [[0,0], [10000, -50]], alarmUpper: [[0,5], [10000, 55]], alarmLower: [[0,-5], [10000, -55]] } },
+        obj4: { name: "Slickline/Wireline Water Shut-Off", personnel: ["Wireline Supervisor", "Slickline Supervisor"], steps: ["RIH on wireline and set Cast Iron Bridge Plug (CIBP) above lower perfs.", "Pressure test CIBP to confirm seal.", "Make multiple slickline runs with a dump bailer to place a 100ft cement cap on top of the CIBP.", "Wait on cement (WOC), then tag top of cement to verify.", "Return well to production from upper zone."], risks: { operational: 3, geological: 2, equipment: 3, hse: 2, financial: 1 }, cost: 450000, duration: 4, tfaModel: { pickUp: [[0, 100], [9500, 150]], slackOff: [[0, 100], [9500, 50]], alarmUpper: [[0, 110], [9500, 160]], alarmLower: [[0, 90], [9500, 40]] } },
+        obj5: { name: "Slickline Insert Safety Valve Installation", personnel: ["Slickline Supervisor"], steps: ["RIH with heavy-duty toolstring and mechanically lock open the failed TRSSV.", "POOH and confirm lock-open.", "RIH with new Wireline-Retrievable Safety Valve (WRSV) on a running tool.", "Set and lock the new WRSV in the old valve's nipple profile.", "Pressure up control line to hold new valve open, then retrieve running tool.", "Perform full inflow and function test of new valve to certify.", "Return well to production."], risks: { operational: 3, geological: 1, equipment: 4, hse: 3, financial: 2 }, cost: 350000, duration: 3, tfaModel: { pickUp: [[0, 100], [9800, 160]], slackOff: [[0, 100], [9800, 40]], alarmUpper: [[0, 110], [9800, 170]], alarmLower: [[0, 90], [9800, 30]] } },
+        obj6: { name: "Rigless ESP Replacement", personnel: ["Wellsite Engineer", "HWU Supervisor", "ESP Specialist"], steps: ["Rig up Hydraulic Workover Unit (HWU).", "Kill well with completion brine.", "POOH with production tubing and failed ESP.", "RIH with new ESP and production tubing.", "Space out and land completion.", "Rig down HWU and bring well online."], risks: { operational: 5, geological: 2, equipment: 5, hse: 4, financial: 5 }, cost: 2800000, duration: 14, tfaModel: { pickUp: [[0,0], [8000, 150]], slackOff: [[0,0], [8000, -150]], alarmUpper: [[0,10], [8000, 160]], alarmLower: [[0,-10], [8000, -160]] } },
+        obj7: { name: "CT Wax Removal", personnel: ["Coiled Tubing Supervisor", "Pump Operator"], steps: ["Rig up Coiled Tubing unit.", "Pump heated solvent to dissolve wax.", "RIH with CT and a mechanical scraper BHA to clear remaining deposits.", "Circulate well clean with hot fluid.", "POOH with CT.", "Return well to production."], risks: { operational: 4, geological: 2, equipment: 3, hse: 3, financial: 2 }, cost: 650000, duration: 4, tfaModel: { pickUp: [[0,0], [7500, 20]], slackOff: [[0,0], [7500, -20]], alarmUpper: [[0,2], [7500, 22]], alarmLower: [[0,-2], [7500, -22]] } }
     };
     const equipmentRequirements = {
-        obj1: [
-            { name: "Coiled Tubing Unit", source: "Vendor", vendor: "Halliburton", price: 125000 },
-            { name: "High-Pressure Pumps", source: "Onboard", vendor: "N/A", price: 0 },
-            { name: "Fluid Tanks", source: "Vendor", vendor: "Baker Hughes", price: 20000 },
-            { name: "Jetting Nozzle BHA", source: "Vendor", vendor: "Schlumberger", price: 15000 },
-        ],
-        obj2: [
-            { name: "Wireline Truck/Skid", source: "Vendor", vendor: "Expro", price: 90000 },
-            { name: "Setting Tool for Bridge Plug", source: "Vendor", vendor: "Baker Hughes", price: 25000 },
-            { name: "Dump Bailer", source: "Vendor", vendor: "Schlumberger", price: 18000 }
-        ],
-        obj3: [
-            { name: "Slickline Unit", source: "Vendor", vendor: "Archer", price: 75000 },
-            { name: "DHSV Pulling/Running Tools", source: "Vendor", vendor: "Schlumberger", price: 45000 },
-        ],
-        obj4: [
-            { name: "Workover Rig", source: "Onboard", vendor: "N/A", price: 0 },
-            { name: "Milling BHA (Motor & Mill)", source: "Vendor", vendor: "Weatherford", price: 250000 },
-            { name: "Cementing Unit", source: "Vendor", vendor: "Halliburton", price: 150000 },
-        ],
-        obj5: [
-            { name: "Coiled Tubing Unit", source: "Vendor", vendor: "Halliburton", price: 125000 },
-            { name: "Wireline Truck/Skid", source: "Vendor", vendor: "Expro", price: 90000 },
-            { name: "Wireline Cutting Tool", source: "Vendor", vendor: "Specialist", price: 80000 },
-            { name: "Heavy Duty Overshot", source: "Vendor", vendor: "Specialist", price: 60000 },
-            { name: "High-Expansion Tubing Patch", source: "Vendor", vendor: "Metalskin", price: 450000 },
-        ]
+        obj1: [ { name: "Hydraulic Workover Unit (HWU)", source: "Vendor", price: 300000 }, { name: "Expandable Steel Patch & Setting Tool", source: "Vendor", price: 500000 } ],
+        obj2: [ { name: "Coiled Tubing Unit", source: "Vendor", price: 125000 }, { name: "Rotating Jetting Nozzle", source: "Vendor", price: 25000 }, { name: "DTPA Chemical", source: "Vendor", price: 80000 } ],
+        obj3: [ { name: "Hydraulic Workover Unit (HWU)", source: "Vendor", price: 300000 }, { name: "Expandable Sand Screen & Expansion Tool", source: "Vendor", price: 600000 } ],
+        obj4: [ { name: "Wireline Truck/Skid", source: "Vendor", price: 90000 }, { name: "Slickline Unit", source: "Vendor", price: 75000 }, { name: "Cast Iron Bridge Plug", source: "Vendor", price: 30000 } ],
+        obj5: [ { name: "Slickline Unit", source: "Vendor", price: 75000 }, { name: "Insert Safety Valve (WRSV)", source: "Vendor", price: 150000 }, { name: "Lock-Open Tool", source: "Vendor", price: 20000 } ],
+        obj6: [ { name: "Hydraulic Workover Unit (HWU)", source: "Vendor", price: 300000 }, { name: "New Electric Submersible Pump (ESP)", source: "Vendor", price: 1200000 } ],
+        obj7: [ { name: "Coiled Tubing Unit", source: "Vendor", price: 125000 }, { name: "Wax Dissolver Chemical", source: "Vendor", price: 50000 }, { name: "Mechanical Scraper BHA", source: "Vendor", price: 15000 } ]
     };
     const equipmentData = [ { id: 'CTU-01', type: 'Coiled Tubing Unit', location: 'Onboard - Deck A', testStatus: 'Passed', nextMaint: '2025-09-15', rate: 25000, status: 'On Job' }, { id: 'CTU-02', type: 'Coiled Tubing Unit', location: 'Onshore Base', testStatus: 'Pending', nextMaint: '2025-07-10', rate: 25000, status: 'Maintenance' }, { id: 'WL-01', type: 'Wireline Truck/Skid', location: 'Onshore Base', testStatus: 'Passed', nextMaint: '2025-08-22', rate: 18000, status: 'Available' }, { id: 'SL-01', type: 'Slickline Unit', location: 'In Transit', testStatus: 'Passed', nextMaint: '2025-07-20', rate: 15000, status: 'In Transit' }, { id: 'PUMP-01', type: 'High-Pressure Pumps', location: 'Onboard - Pump Room', testStatus: 'Pending', nextMaint: '2025-10-01', rate: 8000, status: 'On Job' }, { id: 'PUMP-02', type: 'High-Pressure Pumps', location: 'Onshore Base', testStatus: 'Passed', nextMaint: '2025-11-05', rate: 8000, status: 'Available' }, { id: 'RIG-01', type: 'Workover Rig', location: 'Onboard - Drill Floor', testStatus: 'Passed', nextMaint: '2025-08-01', rate: 85000, status: 'On Job' }, ];
-    const personnelData = [ { id: 'P001', name: 'Bob Raker', role: 'Wellsite Engineer', company: 'Operator', status: 'Onboard', certsValid: true, rate: 2200, muster: 'A', lifeboat: 1 }, { id: 'P002', name: 'Jane Smith', role: 'Coiled Tubing Supervisor', company: 'Service Co.', status: 'Onboard', certsValid: true, rate: 2500, muster: 'A', lifeboat: 1 }, { id: 'P003', name: 'Mike Johnson', role: 'Wireline Supervisor', company: 'Service Co.', status: 'On Job', certsValid: true, rate: 2300, muster: 'B', lifeboat: 2 }, { id: 'P004', name: 'Emily White', role: 'Slickline Supervisor', company: 'Service Co.', status: 'Available', certsValid: false, rate: 2300, muster: 'B', lifeboat: 2 }, { id: 'P005', name: 'Chris Green', role: 'Pump Operator', company: 'Service Co.', status: 'In Transit', certsValid: true, rate: 1800, muster: 'A', lifeboat: 1 }, { id: 'P006', name: 'Alex Brown', role: 'Rig Supervisor', company: 'Operator', status: 'Onboard', certsValid: true, rate: 3000, muster: 'B', lifeboat: 2 }, ];
+    const personnelData = [ { id: 'P001', name: 'Bob Raker', role: 'Wellsite Engineer', company: 'Operator', status: 'Onboard', certsValid: true, rate: 2200, muster: 'A', lifeboat: 1 }, { id: 'P002', name: 'Jane Smith', role: 'Coiled Tubing Supervisor', company: 'Service Co.', status: 'Onboard', certsValid: true, rate: 2500, muster: 'A', lifeboat: 1 }, { id: 'P003', name: 'Mike Johnson', role: 'Wireline Supervisor', company: 'Service Co.', status: 'On Job', certsValid: true, rate: 2300, muster: 'B', lifeboat: 2 }, { id: 'P004', name: 'Emily White', role: 'Slickline Supervisor', company: 'Service Co.', status: 'Available', certsValid: false, rate: 2300, muster: 'B', lifeboat: 2 }, { id: 'P005', name: 'Chris Green', role: 'Pump Operator', company: 'Service Co.', status: 'In Transit', certsValid: true, rate: 1800, muster: 'A', lifeboat: 1 }, { id: 'P006', name: 'Alex Brown', role: 'Rig Supervisor', company: 'Operator', status: 'Onboard', certsValid: true, rate: 3000, muster: 'B', lifeboat: 2 }, { id: 'P007', name: 'David Chen', role: 'ESP Specialist', company: 'Service Co.', status: 'Standby', certsValid: true, rate: 3500, muster: 'A', lifeboat: 2 } ];
     const musterStations = [ { id: 'A', name: 'Muster Station A', capacity: 50, current: 0 }, { id: 'B', name: 'Muster Station B', capacity: 50, current: 0 } ];
     
     // --- FAQ DATA ---
@@ -716,10 +1016,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const aiRecommendationsContainer = document.getElementById('ai-recommendations');
 
     // Performer
-    const kpiLabel1 = document.getElementById('kpi-label-1');
-    const kpiLabel3 = document.getElementById('kpi-label-3');
-    const kpiCardPressure = document.getElementById('kpi-card-pressure');
-    const kpiHookload = document.getElementById('kpi-hookload'), kpiPressure = document.getElementById('kpi-pressure'), kpiSpeed = document.getElementById('kpi-speed'), kpiDepth = document.getElementById('kpi-depth');
+    const kpiGrid = document.getElementById('kpi-grid');
     const procedureStepsContainer = document.getElementById('procedure-steps');
     const logEntriesContainer = document.getElementById('log-entries'), logInput = document.getElementById('log-input'), addLogBtn = document.getElementById('add-log-btn');
     const chartCard = document.getElementById('chart-card');
@@ -730,6 +1027,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const analyzerSubtitle = document.getElementById('analyzer-subtitle'), summaryKpis = document.getElementById('summary-kpis'), lessonsLearnedList = document.getElementById('lessons-learned-list'), lessonInput = document.getElementById('lesson-input'), addLessonBtn = document.getElementById('add-lesson-btn'), planNewJobBtn = document.getElementById('plan-new-job-btn');
 
     // Logistics
+    const logisticsSubtitle = document.getElementById('logistics-subtitle');
+    const logisticsContent = document.getElementById('logistics-content');
     const equipmentTableBody = document.getElementById('equipment-table-body'), personnelTableBody = document.getElementById('personnel-table-body');
     const equipmentSearch = document.getElementById('equipment-search'), personnelSearch = document.getElementById('personnel-search');
 
@@ -738,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // HSE & POB
     const hseContent = document.getElementById('hse-content'), hseSubtitle = document.getElementById('hse-subtitle');
-    const pobContent = document.getElementById('pob-content');
+    const pobContent = document.getElementById('pob-content'), pobSubtitle = document.getElementById('pob-subtitle');
 
     // Modal
     const modal = document.getElementById('well-history-modal'), modalTitle = document.getElementById('modal-title'), modalContent = document.getElementById('modal-content'), closeModalBtn = document.getElementById('close-modal-btn');
@@ -748,7 +1047,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- VIEW & STATE MANAGEMENT ---
     const switchView = (viewName) => {
-        // Clear any running simulation when switching views
         if (appState.liveDataInterval) {
             clearInterval(appState.liveDataInterval);
             appState.liveDataInterval = null;
@@ -764,11 +1062,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById(`${viewName}-view`).classList.remove('hidden');
 
         navLinks.forEach(l => l.classList.remove('active'));
-        document.getElementById(`${viewName}-nav-link`)?.classList.add('active');
+        const activeLink = document.getElementById(`${viewName}-nav-link`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
         
-        headerDetails.innerHTML = ''; // Clear details by default
+        headerDetails.innerHTML = ''; 
         const theme = viewName === 'performer' ? 'dark' : localStorage.getItem('theme') || 'light';
-        setTheme(theme); // Apply correct theme for the view
+        setTheme(theme);
 
         let viewTitle = viewName.charAt(0).toUpperCase() + viewName.slice(1);
         if(viewName === 'pob') viewTitle = 'POB & ER';
@@ -783,9 +1084,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if(appState.selectedWell && appState.generatedPlan) {
                 headerDetails.innerHTML = `<div class="text-right"><p class="text-sm">Well: ${appState.selectedWell.name}</p><p class="text-sm">Job: ${appState.generatedPlan.name}</p></div>`;
             }
-            if (viewName === 'commercial') initializeCommercial();
-            if (viewName === 'hse') initializeHSE();
-            if (viewName === 'pob') initializePOB();
+            if (viewName === 'commercial') renderCommercialView();
+            if (viewName === 'hse') renderHSEView();
+            if (viewName === 'pob') renderPOBView();
         } else if (viewName === 'logistics') {
             renderAssetManagementViews();
         } else if (viewName === 'faq') {
@@ -798,8 +1099,10 @@ document.addEventListener('DOMContentLoaded', function() {
         appState.commercial = { afe: 0, actualCost: 0, serviceTickets: [] };
         appState.ai = { selectedProblemId: null, selectedRecommendation: null };
         document.querySelectorAll('.planner-card').forEach(c => c.classList.remove('selected'));
-        if(document.querySelector('input[name="objective"]:checked')) { document.querySelector('input[name="objective"]:checked').checked = false; }
-        if(document.querySelector('input[name="problem"]:checked')) { document.querySelector('input[name="problem"]:checked').checked = false; }
+        const checkedObjective = document.querySelector('input[name="objective"]:checked');
+        if(checkedObjective) { checkedObjective.checked = false; }
+        const checkedProblem = document.querySelector('input[name="problem"]:checked');
+        if(checkedProblem) { checkedProblem.checked = false; }
         generatePlanBtnManual.disabled = true;
         generatePlanBtnAi.disabled = true;
         aiRecommendationsContainer.classList.add('hidden');
@@ -808,6 +1111,21 @@ document.addEventListener('DOMContentLoaded', function() {
         aiAdvisorView.classList.add('hidden');
         switchView(switchToHome ? 'home' : 'planner');
         updatePlannerStepUI(1);
+        updateNavLinks();
+    };
+
+    const updateNavLinks = () => {
+        const planExists = !!appState.generatedPlan;
+        navLinks.forEach(link => {
+            const id = link.id.replace('-nav-link', '');
+            if (id !== 'home' && id !== 'planner' && id !== 'about' && id !== 'faq' && id !== 'whitepaper') {
+                if (planExists) {
+                    link.classList.remove('disabled');
+                } else {
+                    link.classList.add('disabled');
+                }
+            }
+        });
     };
 
     // --- PLANNER LOGIC ---
@@ -830,7 +1148,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div>
                             <p class="font-semibold">${item.name}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
-                                Source: ${item.source} ${item.vendor !== 'N/A' ? `(${item.vendor})` : ''}
+                                Source: ${item.source}
                             </p>
                         </div>
                     </div>
@@ -845,25 +1163,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const riskChartCtx = document.getElementById('riskChart').getContext('2d');
         const chartTheme = getChartThemeOptions();
         new Chart(riskChartCtx, { type: 'radar', data: { labels: riskLabels, datasets: [{ label: 'Risk Level', data: riskData, backgroundColor: 'rgba(13, 148, 136, 0.2)', borderColor: 'rgba(13, 148, 136, 1)', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { suggestedMin: 0, suggestedMax: 5, ticks: { display: false }, grid: { color: chartTheme.scales.x.grid.color }, angleLines: { color: chartTheme.scales.x.grid.color }, pointLabels: { color: chartTheme.scales.x.ticks.color } } }, plugins: { legend: { display: false } } } });
+        updateNavLinks();
     };
     const updatePlannerStepUI = (currentStep) => { Object.values(stepIndicators).forEach(ind => ind.classList.remove('active', 'completed')); for (let i = 1; i < currentStep; i++) { stepIndicators[i].classList.add('completed'); } stepIndicators[currentStep].classList.add('active'); Object.keys(stepSections).forEach(key => stepSections[key].classList.toggle('hidden', key != currentStep)); };
 
     // --- PERFORMER LOGIC ---
     const initializePerformer = () => {
         const isSlickline = appState.generatedPlan.name.toLowerCase().includes('slickline');
+        
+        kpiGrid.innerHTML = `
+            <div id="kpi-weight-card" class="kpi-card p-4 flex flex-col items-center justify-center"></div>
+            <div id="kpi-pressure-card" class="kpi-card p-4 flex flex-col items-center justify-center"></div>
+            <div id="kpi-annulus-card" class="kpi-card p-4 flex flex-col items-center justify-center"></div>
+            <div id="kpi-speed-card" class="kpi-card p-4 flex flex-col items-center justify-center"></div>
+            <div id="kpi-depth-card" class="kpi-card p-4 flex flex-col items-center justify-center"></div>
+        `;
+        kpiGrid.className = 'grid grid-cols-2 md:grid-cols-5 gap-4 lg:gap-6';
 
-        // Set up KPI labels based on job type
         if (isSlickline) {
-            kpiLabel1.textContent = 'Weight (lbs)';
-            kpiCardPressure.style.display = 'none';
-            kpiLabel3.textContent = 'Line Speed (ft/min)';
+            createRadialGauge('kpi-weight-card', 'Weight', 'lbs', 2000);
+            document.getElementById('kpi-pressure-card').style.display = 'none';
+            document.getElementById('kpi-annulus-card').style.display = 'none';
+            kpiGrid.className = 'grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6';
         } else {
-            kpiLabel1.textContent = 'Hookload (klbf)';
-            kpiCardPressure.style.display = 'block';
-            kpiLabel3.textContent = 'CT Speed (ft/min)';
+            createRadialGauge('kpi-weight-card', 'Hookload', 'klbf', 100);
+            createRadialGauge('kpi-pressure-card', 'Tubing Pressure', 'psi', 5000);
+            createRadialGauge('kpi-annulus-card', 'Annulus Pressure', 'psi', 3000);
         }
+        createBarGauge('kpi-speed-card', 'Line Speed', 'ft/min', 150);
+        createRadialGauge('kpi-depth-card', 'Depth', 'ft', 15000);
 
-        appState.liveData = { depth: 0, hookload: 0, pressure: 0, speed: 0, currentStep: 1, isRIH: true, jobRunning: true, alarmState: false, npt: { weather: 0, equipment: 0, operational: 0 }, opTime: 0, stepStartTime: Date.now() };
+        appState.liveData = { depth: 0, hookload: 0, pressure: 0, annulusPressure: 1500, speed: 0, currentStep: 1, isRIH: true, jobRunning: true, alarmState: false, npt: { weather: 0, equipment: 0, operational: 0 }, opTime: 0, stepStartTime: Date.now() };
         appState.logEntries = [{ time: new Date(), user: 'System', text: 'Job initiated.' }];
         appState.generatedPlan.procedure = appState.generatedPlan.steps.map((s, i) => ({ id: i + 1, text: s, completed: false, active: false }));
         
@@ -920,21 +1250,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 advancePerformerStep();
             }
         } else if (stepText.includes('spot') || stepText.includes('pump') || stepText.includes('circulate')) {
+            isMoving = false;
             appState.liveData.speed = 0;
             appState.liveData.pressure = Math.min(2500, appState.liveData.pressure + 250);
+            appState.liveData.annulusPressure += 50;
         } else {
+             isMoving = false;
              appState.liveData.speed = 0;
              appState.liveData.pressure = Math.max(0, appState.liveData.pressure - 250);
+             appState.liveData.annulusPressure = Math.max(1500, appState.liveData.annulusPressure - 50);
         }
         
-        // Handle static steps
         if (!isMoving && (Date.now() - appState.liveData.stepStartTime > 2000)) {
             advancePerformerStep();
         }
         
         const modelPoints = appState.liveData.isRIH ? appState.generatedPlan.tfaModel.slackOff : appState.generatedPlan.tfaModel.pickUp;
-        appState.liveData.hookload = interpolate(modelPoints, appState.liveData.depth) + (Math.random() * 0.02 - 0.01);
-        if(appState.liveData.depth > 6000 && appState.liveData.depth < 7000 && appState.liveData.isRIH) { appState.liveData.hookload -= 0.05; appState.liveData.npt.operational += 0.005; }
+        appState.liveData.hookload = interpolate(modelPoints, appState.liveData.depth) + (Math.random() * 2 - 1);
+        if(appState.liveData.depth > 6000 && appState.liveData.depth < 7000 && appState.liveData.isRIH) { appState.liveData.hookload -= 5; appState.liveData.npt.operational += 0.005; }
         
         updatePerformerState();
     };
@@ -961,10 +1294,15 @@ document.addEventListener('DOMContentLoaded', function() {
             } 
         }
 
-        kpiHookload.textContent = isSlickline ? (appState.liveData.hookload).toFixed(0) : appState.liveData.hookload.toFixed(1);
-        kpiPressure.textContent = Math.round(appState.liveData.pressure); 
-        kpiSpeed.textContent = Math.round(appState.liveData.speed); 
-        kpiDepth.textContent = Math.round(appState.liveData.depth);
+        if (isSlickline) {
+            updateRadialGauge('kpi-weight-card', appState.liveData.hookload * 1000, 2000);
+        } else {
+            updateRadialGauge('kpi-weight-card', appState.liveData.hookload, 100);
+            updateRadialGauge('kpi-pressure-card', appState.liveData.pressure, 5000);
+            updateRadialGauge('kpi-annulus-card', appState.liveData.annulusPressure, 3000);
+        }
+        updateBarGauge('kpi-speed-card', appState.liveData.speed, 150);
+        updateRadialGauge('kpi-depth-card', appState.liveData.depth, 15000);
         
         if (appState.tfaChartInstance) {
             const actualData = appState.tfaChartInstance.data.datasets[4].data;
@@ -1045,10 +1383,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- ASSET & POB LOGIC ---
     const renderAssetManagementViews = (eqFilter = '', persFilter = '') => {
+        if (!appState.generatedPlan) {
+            logisticsSubtitle.textContent = "Please generate a plan in the Planner to view job-specific logistics.";
+            logisticsContent.innerHTML = `<div class="text-center col-span-2 light-card p-8 rounded-lg"><p>No plan is currently active. Please use the Planner module to generate an intervention plan, and the required tooling and personnel will be displayed here.</p></div>`;
+            return;
+        }
+        logisticsSubtitle.textContent = `Logistics for ${appState.generatedPlan.name} on ${appState.selectedWell.name}`;
+        
+        const requiredEquipment = equipmentRequirements[appState.selectedObjective.id];
+        const requiredRoles = appState.generatedPlan.personnel;
+
         const eqF = eqFilter.toLowerCase();
-        equipmentTableBody.innerHTML = equipmentData.map(e => `<tr><td class="p-2">${e.id}</td><td class="p-2">${e.type}</td><td class="p-2">${e.location}</td><td class="p-2"><span class="px-2 py-1 text-xs font-medium rounded-full status-${e.testStatus.toLowerCase()}">${e.testStatus}</span></td><td class="p-2"><button class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full hover:bg-blue-200 disabled:opacity-50" ${e.location === 'Onboard - Pump Room' && e.testStatus === 'Pending' ? '' : 'disabled'}>Test</button></td></tr>`).join('');
+        const filteredEquipment = equipmentData.filter(e => requiredEquipment.some(req => req.name === e.type) && (e.id.toLowerCase().includes(eqF) || e.type.toLowerCase().includes(eqF)));
+        equipmentTableBody.innerHTML = filteredEquipment.map(e => `<tr><td class="p-2">${e.id}</td><td class="p-2">${e.type}</td><td class="p-2">${e.location}</td><td class="p-2"><span class="px-2 py-1 text-xs font-medium rounded-full status-${e.status.toLowerCase()}">${e.status}</span></td><td class="p-2"><button class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full hover:bg-blue-200 disabled:opacity-50" ${e.location === 'Onboard - Pump Room' && e.testStatus === 'Pending' ? '' : 'disabled'}>Test</button></td></tr>`).join('');
+
         const persF = persFilter.toLowerCase();
-        personnelTableBody.innerHTML = personnelData.filter(p => p.name.toLowerCase().includes(persF) || p.role.toLowerCase().includes(persF)).map(p => `<tr><td class="p-2">${p.name}</td><td class="p-2">${p.role}</td><td class="p-2"><span class="px-2 py-1 text-xs font-medium rounded-full status-${p.status.toLowerCase().replace(/\s/g, '')}">${p.status}</span></td><td class="p-2">${p.certsValid ? '✅ Valid' : '❌ Expired'}</td></tr>`).join('');
+        const filteredPersonnel = personnelData.filter(p => requiredRoles.includes(p.role) && (p.name.toLowerCase().includes(persF) || p.role.toLowerCase().includes(persF)));
+        personnelTableBody.innerHTML = filteredPersonnel.map(p => `<tr><td class="p-2">${p.name}</td><td class="p-2">${p.role}</td><td class="p-2"><span class="px-2 py-1 text-xs font-medium rounded-full status-${p.status.toLowerCase().replace(/\s/g, '')}">${p.status}</span></td><td class="p-2">${p.certsValid ? '✅ Valid' : '❌ Expired'}</td></tr>`).join('');
     };
     const checkLogistics = () => {
         const conflicts = [];
@@ -1073,13 +1424,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         return conflicts;
     };
-    const initializePOB = () => {
-        appState.pob.personnel = JSON.parse(JSON.stringify(personnelData)).map(p => ({...p, musterStatus: 'Unaccounted'}));
-        if(appState.pob.musterInterval) clearInterval(appState.pob.musterInterval);
-        appState.pob.musterActive = false;
-        renderPOBView();
-    };
     const renderPOBView = () => {
+        if (!appState.generatedPlan) {
+            pobSubtitle.textContent = "Please generate a plan in the Planner to view job-specific POB.";
+            pobContent.innerHTML = `<div class="text-center light-card p-8 rounded-lg"><p>No plan is currently active. Please use the Planner module to generate an intervention plan, and the required personnel for that job will be displayed here.</p></div>`;
+            return;
+        }
+
+        const requiredPersonnel = personnelData.filter(p => appState.generatedPlan.personnel.includes(p.role));
+        appState.pob.personnel = JSON.parse(JSON.stringify(requiredPersonnel)).map(p => ({...p, musterStatus: 'Unaccounted'}));
+        
+        pobSubtitle.textContent = `Live POB manifest for ${appState.generatedPlan.name} on ${appState.selectedWell.name}`;
+
         const totalPOB = appState.pob.personnel.length;
         const musteredCount = appState.pob.personnel.filter(p => p.musterStatus === 'Mustered').length;
         musterStations.forEach(ms => { ms.current = appState.pob.personnel.filter(p => p.muster === ms.id && p.musterStatus === 'Mustered').length; });
@@ -1111,7 +1467,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- COMMERCIAL & HSE LOGIC ---
     const initializeCommercial = () => {
-        if (!appState.generatedPlan) { commercialContent.innerHTML = `<p class="text-center">Please generate a plan in the Planner module first to view commercial data.</p>`; return; }
+        if (!appState.generatedPlan) { 
+            commercialContent.innerHTML = `<div class="text-center light-card p-8 rounded-lg"><p>No plan is currently active. Please use the Planner module to generate an intervention plan, and the associated financial data will be displayed here.</p></div>`;
+            commercialSubtitle.textContent = "No active operation."
+            return; 
+        }
         commercialSubtitle.textContent = `Live financial tracking for ${appState.generatedPlan.name} on ${appState.selectedWell.name}`;
         appState.commercial.afe = appState.generatedPlan.cost;
         appState.commercial.actualCost = 0;
@@ -1120,13 +1480,17 @@ document.addEventListener('DOMContentLoaded', function() {
         equipmentList.forEach(item => {
             if (item.price > 0) {
                 const cost = item.price * appState.generatedPlan.duration;
-                appState.commercial.serviceTickets.push({ description: `Rental: ${item.name} (${item.vendor})`, cost: cost, validated: true });
+                appState.commercial.serviceTickets.push({ description: `Rental: ${item.name}`, cost: cost, validated: true });
                 appState.commercial.actualCost += cost;
             }
         });
         renderCommercialView();
     };
     const renderCommercialView = () => {
+        if (!appState.generatedPlan) {
+            initializeCommercial();
+            return;
+        }
         const afe = appState.commercial.afe, actual = appState.commercial.actualCost;
         const burnPercent = afe > 0 ? Math.min(100, (actual / afe) * 100) : 0;
         const burnColor = burnPercent > 90 ? 'bg-red-500' : burnPercent > 75 ? 'bg-yellow-500' : 'bg-teal-500';
@@ -1143,13 +1507,21 @@ document.addEventListener('DOMContentLoaded', function() {
         } else { resultContainer.innerHTML = `<div class="p-3 rounded-md bg-red-50 dark:bg-red-900/50 border-l-4 border-red-400 text-red-800 dark:text-red-300"><strong>Discrepancy Found!</strong> Invoice is <strong>$${Math.abs(difference).toLocaleString()} ${difference > 0 ? 'over' : 'under'}</strong> system-validated cost.</div>`; }
     };
     const initializeHSE = () => {
-        if (!appState.generatedPlan) { hseContent.innerHTML = `<p class="text-center">Please generate a plan in the Planner module first to view job-specific HSE & Risk data.</p>`; return; }
+        if (!appState.generatedPlan) { 
+            hseContent.innerHTML = `<div class="text-center light-card p-8 rounded-lg"><p>No plan is currently active. Please use the Planner module to generate an intervention plan, and the associated HSE & Risk data will be displayed here.</p></div>`;
+            hseSubtitle.textContent = "No active operation."
+            return; 
+        }
         hseSubtitle.textContent = `Risk register and permits for ${appState.generatedPlan.name} on ${appState.selectedWell.name}`;
         appState.hse.permits = [ { id: 'PTW001', name: 'General Permit to Work', status: 'Approved' }, { id: 'PTW002', name: 'Hot Work Permit', status: 'Pending' }, { id: 'PTW003', name: 'Confined Space Entry', status: 'Approved' }, ];
         appState.hse.riskRegister = [ { hazard: 'Dropped Objects during Rig Up', consequence: 'Personnel Injury', mitigation: 'Establish exclusion zones; secure all items aloft.', risk: 'Medium' }, { hazard: 'Loss of Containment', consequence: 'Environmental Spill', mitigation: 'Verify PCE integrity; function test all valves.', risk: 'High' } ];
         renderHSEView();
     };
     const renderHSEView = () => {
+        if (!appState.generatedPlan) {
+            initializeHSE();
+            return;
+        }
         const riskRegisterHtml = `<div class="light-card p-6 rounded-lg"><h3 class="text-xl font-semibold mb-4">Dynamic Risk Register</h3><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="table-header"><tr><th class="p-2">Hazard</th><th class="p-2">Consequence</th><th class="p-2">Mitigation</th><th class="p-2">Risk Level</th></tr></thead><tbody>${appState.hse.riskRegister.map(r => `<tr class="border-b table-row-alt dark:border-gray-700"><td class="p-2">${r.hazard}</td><td class="p-2">${r.consequence}</td><td class="p-2">${r.mitigation}</td><td class="p-2"><span class="risk-${r.risk.toLowerCase()} px-2 py-1 text-xs font-medium rounded-full">${r.risk}</span></td></tr>`).join('')}</tbody></table></div></div>`;
         const ptwHtml = `<div class="light-card p-6 rounded-lg"><h3 class="text-xl font-semibold mb-4">Permit to Work (PTW) Status</h3><div class="space-y-3">${appState.hse.permits.map(p => `<div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md"><span class="font-medium">${p.name}</span><span class="px-2 py-1 text-xs font-medium rounded-full status-${p.status.toLowerCase()}">${p.status}</span></div>`).join('')}</div></div>`;
         hseContent.innerHTML = `<div class="grid gap-8 lg:grid-cols-2">${riskRegisterHtml}${ptwHtml}</div>`;
@@ -1274,7 +1646,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const strokeSuccess = '#16a34a';
 
             if(e.item.includes('Packer')) { svgContent += `<polygon points="75,${y-10} 105,${y-10} 110,${y} 70,${y}" fill="${fillNormal}"/>`; } 
-            else if (e.item.includes('SSSV')) { svgContent += `<rect x="82" y="${y}" width="16" height="20" class="${e.isProblem ? 'stroke-red-500 fill-red-200/50' : 'fill-gray-400'}" stroke-width="1"/><path d="M 85 ${y+3} l 10 14 M 85 ${y+17} l 10 -14" stroke="${e.isProblem ? strokeProblem : '#6b7280'}" stroke-width="1.5"/>`; } 
+            else if (e.item.includes('SSSV')) { svgContent += `<rect x="82" y="${y}" width="16" height="20" fill="${e.isProblem ? 'rgba(239,68,68,0.2)' : 'rgba(107,114,128,0.5)'}" stroke="${e.isProblem ? strokeProblem : '#6b7280'}" stroke-width="1"/><path d="M 85 ${y+3} l 10 14 M 85 ${y+17} l 10 -14" stroke="${e.isProblem ? strokeProblem : '#6b7280'}" stroke-width="1.5"/>`; } 
             else if (e.item.includes('Scale')) { svgContent += `<path d="M 85 ${y-10} C 80 ${y}, 80 ${y+10}, 85 ${y+20}" stroke="#c2410c" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 95 ${y-10} C 100 ${y}, 100 ${y+10}, 95 ${y+20}" stroke="#c2410c" stroke-width="2" fill="none" stroke-linecap="round"/>`; } 
             else if (e.item.includes('Shale')) { svgContent += `<rect x="40" y="${y}" width="100" height="100" fill="rgba(239, 68, 68, 0.1)" /><text x="75" y="${y+50}" class="schematic-label" text-anchor="middle" fill="#ef4444">${e.item}</text>`; }
             else if (e.item.includes('Fish')) { svgContent += `<g transform="translate(90 ${y})"><path d="M-5 -10 L 5 -10 L 3 -5 L -3 -5 Z M-2 -5 L 2 -5 L 2 10 L -2 10 Z" fill="${fillProblem}" stroke="${strokeProblem}" stroke-width="1" /><text x="15" y="5" class="schematic-label" fill="${strokeProblem}">${e.item}</text></g>`; }
@@ -1291,25 +1663,35 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('theme', theme);
         if(appState.currentView === 'performer') body.classList.add('theme-dark');
 
-        Object.values(appState).forEach(s => {
-            if (s && s instanceof Chart) {
+        // Update charts
+        const charts = [appState.savingsChartInstance, appState.tfaChartInstance, appState.nptChartInstance];
+        charts.forEach(chart => {
+            if (chart) {
                 const chartTheme = getChartThemeOptions();
-                s.options.scales.x.grid.color = chartTheme.scales.x.grid.color;
-                s.options.scales.x.ticks.color = chartTheme.scales.x.ticks.color;
-                s.options.scales.y.grid.color = chartTheme.scales.y.grid.color;
-                s.options.scales.y.ticks.color = chartTheme.scales.y.ticks.color;
-                if(s.options.plugins.legend) s.options.plugins.legend.labels.color = chartTheme.plugins.legend.labels.color;
-                if(s.config.type === 'doughnut') s.data.datasets[0].borderColor = theme === 'dark' ? '#1f2937' : 'white';
-                s.update();
+                if(chart.options.scales.x) {
+                    chart.options.scales.x.grid.color = chartTheme.scales.x.grid.color;
+                    chart.options.scales.x.ticks.color = chartTheme.scales.x.ticks.color;
+                }
+                 if(chart.options.scales.y) {
+                    chart.options.scales.y.grid.color = chartTheme.scales.y.grid.color;
+                    chart.options.scales.y.ticks.color = chartTheme.scales.y.ticks.color;
+                }
+                if(chart.options.plugins.legend) {
+                    chart.options.plugins.legend.labels.color = chartTheme.plugins.legend.labels.color;
+                }
+                if(chart.config.type === 'doughnut') {
+                    chart.data.datasets[0].borderColor = theme === 'dark' ? '#0f172a' : 'white';
+                }
+                chart.update();
             }
         });
     };
     const getChartThemeOptions = () => {
         const isDark = body.classList.contains('theme-dark');
-        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '#d1d5db';
+        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e7eb';
         const textColor = isDark ? '#d1d5db' : '#4b5563';
         return {
-            scales: { x: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Depth (ft)', color: textColor } }, y: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Hookload (klbf)', color: textColor } } },
+            scales: { x: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Depth (ft)', color: textColor } }, y: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Value', color: textColor } } },
             plugins: { legend: { labels: { color: textColor } } }
         };
     };
@@ -1322,7 +1704,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const nptReductionValue = document.getElementById('nptReductionValue');
     const timeSavingsValue = document.getElementById('timeSavingsValue');
     const totalSavingsValue = document.getElementById('totalSavings');
-    const savingsChartCanvas = document.getElementById('savingsChart').getContext('2d');
+    const savingsChartCanvas = document.getElementById('savingsChart');
 
     const calculateROI = () => {
         if (!engineerCountSlider) return;
@@ -1355,8 +1737,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const initSavingsChart = () => {
         if (!savingsChartCanvas) return;
+        const ctx = savingsChartCanvas.getContext('2d');
         const isDark = body.classList.contains('theme-dark');
-        appState.savingsChartInstance = new Chart(savingsChartCanvas, {
+        appState.savingsChartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Engineering Time', 'NPT Reduction'],
@@ -1413,6 +1796,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
+            if (link.classList.contains('disabled')) return;
             switchView(e.currentTarget.id.replace('-nav-link', ''));
         });
     });
@@ -1475,6 +1859,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderObjectives();
         renderProblems();
         initSavingsChart();
+        updateNavLinks();
     };
 
     init();
