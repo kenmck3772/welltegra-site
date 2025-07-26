@@ -2,8 +2,9 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open('welltegra-cache-v1').then(cache => {
       return cache.addAll([
-        '/index_final.html',
-        '/logo.png'
+        '/index.html',
+        '/logo-192x192.png',
+        '/logo-512x512.png'
       ]);
     })
   );

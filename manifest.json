@@ -1,12 +1,21 @@
-"icons": [
-  {
-    "src": "logo.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  },
-  {
-    "src": "logo.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+{
+  "name": "WellTegra",
+  "short_name": "WellTegra",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
