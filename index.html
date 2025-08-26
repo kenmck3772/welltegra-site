@@ -1,20 +1,9 @@
-Of course. I've updated the "About" section to include `info@welltegra.network` as the contact email.
-
-This addition provides a clear call to action for potential partners who are interested after reading about your mission and the project's path forward.
-
-Here is the complete, finalized code with this change integrated.
-
------
-
-### Complete and Final Code
-
-```html
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Well-Tegra | Advanced Intervention Simulation</title>
+    <title>Well-Tegra | Final Version</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,8 +22,9 @@ Here is the complete, finalized code with this change integrated.
         .planner-card.selected { border-color: #60a5fa; transform: translateY(-5px); border-width: 2px; }
         .planner-card[data-well-id="W666"] { border-color: #ef4444; background-image: linear-gradient(rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0)); }
         .planner-card[data-well-id="W666"].selected { border-color: #ef4444 !important; box-shadow: 0 10px 15px -3px rgb(239 68 68 / 0.2); }
-        .status-active-restoredproduction { background-color: #10b981; color: #ffffff; }
-        .status-shut-in-wellintegrityissues { background-color: #ef4444; color: #ffffff; }
+        .status-active-restoredproduction, .status-passed { background-color: #10b981; color: #ffffff; }
+        .status-shut-in-wellintegrityissues, .status-failed, .status-slightleak, .status-repaired { background-color: #ef4444; color: #ffffff; }
+        .status-overdue, .status-toppedup { background-color: #f59e0b; color: #ffffff; }
         .performer-view .dashboard-grid { display: grid; grid-template-columns: 2fr 5fr 3fr; gap: 1.5rem; height: calc(100vh - 80px); }
         .performer-view .kpi-card { background-color: #1e293b; border-radius: 0.5rem; border: 1px solid #334155; }
         .performer-view .alarm, .emergency-bg { animation: pulse 1.5s infinite; }
@@ -49,6 +39,8 @@ Here is the complete, finalized code with this change integrated.
         .hero-section h1, .hero-section p { text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); }
         .modal-tab.active { color: #60a5fa; border-bottom-color: #60a5fa; }
         .schematic-label { font-family: 'Roboto Mono', monospace; font-size: 10px; }
+        .table-header { background-color: #334155; }
+        .table-row-alt { background-color: rgba(30, 41, 59, 0.5); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-up { opacity: 0; animation: fadeInUp 0.6s ease-out forwards; }
     </style>
@@ -105,16 +97,20 @@ document.addEventListener('DOMContentLoaded', function() {
             issue: 'Multiple fish (CT & Wireline) in hole with suspected tubing-to-annulus communication.', 
             history: [ { date: '2026-05-22', operation: 'Coiled Tubing: Milling Operation', problem: 'Aggressive milling led to coiled tubing fatigue and a pipe fracture. CT parted at 11,800ft.', lesson: 'CT fatigue must be tracked meticulously. Milling in HPHT wells without clear visuals is a high-risk gamble.' } ], 
             dailyReports: [ { date: '2026-08-04', summary: 'Day 3 of fishing for CT. Unable to get a latch. Jarring ceased. Fish (CT) and fish (Wireline tools) now both left in hole.', npt: 24.0, toolstringRun: ['Rope Socket', 'Stem', 'Spang Jars', 'CT Overshot'] } ],
-            completion: {
-                maxDepth: 19000,
-                equipment: [
-                    { item: 'Fish (Tangled CT & WL)', depth: 11800, type: 'restriction', isProblem: true, id: 1.5 },
-                    { item: 'Damaged Tubing', depth: 12450, type: 'restriction', isProblem: true },
-                    { item: 'SSSV', depth: 2500, type: 'valve', isProblem: true }, 
-                    { item: 'Packer', depth: 17750, type: 'packer' }
-                ]
-            } 
+            treeData: [
+                { id: 'SV', name: 'Swab Valve', type: 'Gate', actuator: 'Manual', pressure: 10000, last_insp: '2025-01-10', status: 'Passed'},
+                { id: 'UMV', name: 'Upper Master Valve', type: 'Gate', actuator: 'Hydraulic', pressure: 10000, last_insp: '2025-01-10', status: 'Passed'},
+                { id: 'LMV', name: 'Lower Master Valve', type: 'Gate', actuator: 'Hydraulic', pressure: 10000, last_insp: '2024-02-05', status: 'Slight Leak'},
+                { id: 'KWV', name: 'Kill Wing Valve', type: 'Gate', actuator: 'Manual', pressure: 10000, last_insp: '2025-01-10', status: 'Passed'},
+                { id: 'PWV', name: 'Production Wing Valve', type: 'Gate', actuator: 'Hydraulic', pressure: 10000, last_insp: '2023-07-21', status: 'Overdue'},
+            ],
+            treeHistory: [
+                { date: '2025-06-20', activity: 'Annulus Top-Up', summary: 'Topped up A annulus with 2 bbls of fluid.', status: 'ToppedUp'},
+                { date: '2024-08-15', activity: 'Gate Valve Repair', summary: 'Replaced gate and seats on Production Wing Valve (PWV) due to passing test.', status: 'Repaired'},
+                { date: '2024-02-05', activity: 'Annual PMS', summary: 'Full tree integrity test. LMV showed slight pressure drop over 15 mins. Flagged for monitoring.', status: 'Passed'},
+            ]
         },
+        // Other case study wells
         { id: 'W001', name: 'Gullfaks C-34', field: 'Gullfaks', status: 'Active - Underperforming', issue: 'Suspected scale buildup.', history: [ { date: '2024-02-20', operation: 'Coiled Tubing Scale Cleanout', problem: 'Motor stalled multiple times due to unexpectedly hard scale. The fluid system was unable to efficiently lift the large volume of debris, causing a pack-off scare.', lesson: 'A high-viscosity fluid sweep is essential for hole cleaning when milling hard debris to prevent packing off.' } ]},
         { id: 'W002', name: 'Statfjord A-12', field: 'Statfjord', status: 'Active - Low Injectivity', issue: 'Possible perforation plugging.', history: [ { date: '2024-04-11', operation: 'Production Logging (Wireline)', problem: 'Logging tool string became stuck at 2,900m. Jarring was unsuccessful. Had to perform a "cut and thread" fishing operation to retrieve the tool.', lesson: 'Wellbore tortuosity data must be consulted. A rigid toolstring run into a high-angle section will cause a hangup. The risk can be flagged automatically.' } ]},
         { id: 'W003', name: 'Oseberg B-21', field: 'Oseberg', status: 'Shut-in - Well Integrity Issues', issue: 'Suspected downhole safety valve failure.', history: [ { date: '2023-09-14', operation: 'Slickline: Attempted DHSV Lock-Open', problem: 'Ran lock-open tool. Tool sheared prematurely due to debris in the control line, leaving a new fish on top of the already faulty DHSV.', lesson: 'A simple control line flush was missed in the procedure. This highlights a failure in planning and assessing prerequisite tasks.' } ]}
@@ -140,7 +136,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- TEMPLATES ---
     const templates = {
-        home: `...`, // Content truncated for brevity, it's unchanged
+        home: `
+            <div id="home-view" class="view-container fade-in-up">
+                <section class="hero-section py-20 md:py-32">
+                    <video autoplay loop muted playsinline id="hero-video" poster="https://welltegra.network/assets/thumbnail.png"><source src="https://welltegra.network/assets/thumbnail.mp4" type="video/mp4"></video>
+                    <div class="hero-overlay"></div>
+                    <div class="max-w-4xl mx-auto text-center relative z-10">
+                        <h1 class="text-4xl md:text-6xl font-bold tracking-tight">From Data Chaos to Predictive Clarity.</h1>
+                        <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-slate-200">The well engineering software ecosystem isn't broken, it's disconnected. This fragmentation creates hidden operational taxes that erode profitability and hinder performance.</p>
+                    </div>
+                </section>
+            </div>`,
         planner: `
             <div id="planner-view" class="view-container hidden max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-8 fade-in"><h2 class="text-3xl font-bold tracking-tight">Well Intervention Planner</h2></div>
@@ -157,35 +163,52 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="mt-8 flex justify-center space-x-4"><button id="start-over-btn" class="rounded-md bg-slate-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-slate-500 transition-all active:scale-95">Start Over</button><button id="begin-op-btn" class="rounded-md bg-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-emerald-500 transition-all active:scale-95">Begin Live Operation</button></div>
                 </section>
             </div>`,
-        performer: `...`, // Unchanged
-        analyzer: `...`, // Unchanged
-        about: `
-            <div id="about-view" class="view-container hidden max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <div class="text-center"><h2 class="text-3xl font-bold tracking-tight">About The Mission</h2></div>
-                <div class="mt-10 light-card p-8 rounded-lg space-y-8">
-                    <div>
-                        <h3 class="text-2xl font-bold">From the Wellsite to the Web</h3>
-                        <p class="text-lg italic mt-2">"I built Well-Tegra because I've lived the problems it's designed to solve." - Kenneth McKenzie</p>
+        performer: `
+            <div id="performer-view" class="view-container hidden performer-view p-4 lg:p-6 h-full">
+                <div class="h-full dashboard-grid">
+                    <div id="procedure-panel" class="bg-slate-800/50 rounded-lg p-4 flex flex-col">
+                        <h2 class="text-lg font-semibold mb-2 border-b border-slate-700 pb-2">Operational Procedure</h2>
+                        <p class="text-xs text-slate-400 mb-3">Live simulation running...</p>
+                        <div id="procedure-steps" class="flex-1 space-y-3 overflow-y-auto pr-2"></div>
+                        <div id="performer-controls" class="hidden mt-4">
+                            <button id="view-analysis-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-md transition active:scale-95">View Post-Job Analysis</button>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="text-xl font-semibold">Why I Built This</h4>
-                        <p>I've seen first-hand how much time, money, and energy we waste because our data is a mess. It's locked in different systems, buried in old reports, and stuck in spreadsheets. We repeat the same mistakes because the lessons learned from one job are never available for the next. The "Well From Hell" in this demo isn't an exaggeration; it's a sanitized version of the real-world train wrecks I've witnessed—and helped clean up.</p>
-                        <p class="mt-2">Well-Tegra is my answer to that chaos. It's a platform designed from an operator's perspective, focused on a single source of truth that connects planning, execution, and analysis.</p>
+                    <div class="flex flex-col gap-4 lg:gap-6">
+                        <div id="kpi-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6"></div>
+                        <div id="chart-card" class="flex-1 bg-slate-800/50 rounded-lg p-4 flex-col">
+                            <h3 class="text-lg font-semibold mb-2">Weight vs. Depth: Plan vs. Actual</h3>
+                            <div class="flex-1 relative"><canvas id="tfaChart"></canvas></div>
+                        </div>
                     </div>
-                    <div class="bg-blue-900/50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-                        <h4 class="font-bold text-blue-300">The Path Forward</h4>
-                        <p class="mt-2 text-blue-200">This demo is the blueprint. To bring it to life, it needs the power of real, collective data. The next step is to partner with operators and service companies to build out the anonymized data pool that will drive the predictive AI. The platform is ready to scale, and I'm actively seeking the right partners to help build the future of well operations.</p>
-                        <p class="mt-4">To learn more or discuss a potential partnership, please contact us at: <a href="mailto:info@welltegra.network" class="font-bold text-teal-400 hover:underline">info@welltegra.network</a></p>
+                    <div class="bg-slate-800/50 rounded-lg p-4 flex flex-col">
+                        <h2 class="text-lg font-semibold mb-4 border-b border-slate-700 pb-2">Operations Log</h2>
+                        <div id="log-entries" class="flex-1 space-y-3 overflow-y-auto mb-4"></div>
+                        <div class="mt-auto">
+                            <textarea id="log-input" class="w-full bg-slate-900 border border-slate-600 rounded-md p-2 text-sm" rows="3" placeholder="Add log entry..."></textarea>
+                            <button id="add-log-btn" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-md transition active:scale-95">Add Entry</button>
+                        </div>
                     </div>
                 </div>
-            </div>`
+            </div>`,
+        tree: `
+            <div id="tree-view" class="view-container hidden max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                <div class="text-center fade-in"><h2 class="text-3xl font-bold tracking-tight">Christmas Tree Integrity</h2><p id="tree-subtitle" class="mt-2 max-w-2xl mx-auto text-lg text-slate-400"></p></div>
+                <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div id="tree-schematic-container" class="light-card p-6 rounded-lg"></div>
+                    <div class="space-y-8">
+                        <div id="tree-status-container" class="light-card p-6 rounded-lg"></div>
+                        <div id="tree-history-container" class="light-card p-6 rounded-lg"></div>
+                    </div>
+                </div>
+            </div>`,
+        analyzer: `...`,
     };
     
-    // --- All other functions here ---
+    // --- All other functions ---
     
     init(); // Initialize the app
 });
 </script>
 </body>
 </html>
-```
