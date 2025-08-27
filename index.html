@@ -10,23 +10,39 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: "#0B0B0B", accent: "#0EA5E9", muted: "#6B7280",
+                        border: "#E5E7EB", surface: "#F8FAFC"
+                    },
+                    fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
+                    boxShadow: { soft: "0 10px 24px -12px rgba(0,0,0,.15)" }
+                }
+            }
+        }
+    </script>
     <style>
         /* Base Styles for Landing Page */
-        body { font-family: 'Inter', sans-serif; background-color: #F8F7F4; color: #0B0B0B; }
-        h1, h2, h3, h4, h5, h6 { font-weight: 800; }
-        .header { background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); }
-        .nav-link:hover { color: #0EA5E9; }
-
+        :root { color-scheme: light; }
+        html, body { height: 100%; }
+        body { font-family: Inter, system-ui, sans-serif; }
+        :focus-visible { outline: 2px solid #0EA5E9; outline-offset: 2px; border-radius: .5rem; }
+        
         /* Dark Theme overrides for the Demo Modal */
-        .welltegra-demo { background-color: #0f172a; color: #e2e8f0; }
-        .welltegra-demo h1, .welltegra-demo h2, .welltegra-demo h3, .welltegra-demo h4, .welltegra-demo h5, .welltegra-demo h6 { color: #f8fafc; }
+        .welltegra-demo { background-color: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        .welltegra-demo h1, .welltegra-demo h2, .welltegra-demo h3, .welltegra-demo h4 { color: #f8fafc; font-weight: 800; }
         .welltegra-demo p, .welltegra-demo span, .welltegra-demo label, .welltegra-demo td, .welltegra-demo li { color: #e2e8f0; }
         .welltegra-demo .light-card { background-color: #1e293b; border: 1px solid #334155; }
-        .welltegra-demo .header { background-color: rgba(15, 23, 42, 0.8); border-bottom: 1px solid #1e293b; }
+        .welltegra-demo .header { background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); border-bottom: 1px solid #1e293b; }
         .welltegra-demo .nav-link { color: #94a3b8; }
         .welltegra-demo .nav-link.active { color: #60a5fa; border-bottom-color: #60a5fa; }
         .welltegra-demo .status-active-restoredproduction { background-color: #10b981; color: #ffffff; }
         .welltegra-demo .status-shut-in-wellintegrityissues { background-color: #ef4444; color: #ffffff; }
+        .welltegra-demo .table-header { background-color: #334155; }
+        .welltegra-demo .table-row-alt { background-color: rgba(30, 41, 59, 0.5); }
     </style>
 </head>
 <body class="bg-white text-brand/95">
@@ -131,41 +147,48 @@
         
         // --- DATA STORE ---
         const wellData = [
-            { id: 'W666', name: 'Complex Workover Scenario', operator: 'North Sea Operator', field: 'Devils Basin, UKCS', status: 'Shut-in - Well Integrity Issues', issue: 'Multiple fish (CT & Wireline) in hole with suspected tubing-to-annulus communication.' },
-            { id: 'W001', name: 'CNR - Espoir-12', field: 'Espoir Field, Côte d\'Ivoire', status: 'Active - Underperforming', issue: 'Recurring scale buildup causing production decline.', history: [ { date: '2024-02-20', operation: 'Coiled Tubing Scale Cleanout', problem: 'Motor stalled multiple times due to unexpectedly hard scale. The fluid system was unable to efficiently lift the large volume of debris, causing a pack-off scare.', lesson: 'A high-viscosity fluid sweep is essential for hole cleaning when milling hard debris in deviated wells to prevent packing off.' } ] },
-            { id: 'W002', name: 'Petronas - Bunga Raya A-5', field: 'PM-3, Malaysia', status: 'Shut-in - Well Integrity Issues', issue: 'Sheared tool during DHSV lock-open operation.', history: [ { date: '2023-09-14', operation: 'Slickline: Attempted DHSV Lock-Open', problem: 'Ran lock-open tool. Tool sheared prematurely due to debris in the control line, leaving a new fish on top of the already faulty DHSV.', lesson: 'A simple control line flush was missed in the procedure. This highlights a failure in planning and assessing prerequisite tasks.' } ] },
-            { id: 'W003', name: 'Woodside - Greater Enfield, Australia', field: 'North West Shelf, Australia', status: 'Active - Restored Production', issue: 'DST tool failure due to unexpected H₂S.', history: [ { date: '2023-11-05', operation: 'Drill Stem Test (DST)', problem: 'During the flow period, encountered 1200ppm H₂S not predicted in the geological model. The elastomer seals on the DST packer failed, causing a loss of zonal isolation and forcing an early termination of the test.', lesson: 'Material selection is critical. All downhole tools must be rated for the highest potential H₂S concentration in the area.' } ] },
-            { id: 'W004', name: 'Saudi Aramco - Ghawar-321', field: 'Ghawar Field, Saudi Arabia', status: 'Shut-in - Well Integrity Issues', issue: 'Failed Interval Control Valve (ICV) in a smart completion.', history: [ { date: '2022-06-10', operation: 'Smart Completion Production Optimization', problem: 'Attempted to remotely actuate ICV at 10,200ft to choke back water production. Valve failed to respond; telemetry indicated a short in the downhole control line.', lesson: 'For P&A of smart completions, you cannot rely on remote actuation of ICVs for isolation. A full mechanical barrier must be set above the smart completion interval.' } ] }
+             { 
+                id: 'W666', name: 'Complex Workover Scenario', operator: 'North Sea Operator', field: 'Devils Basin, UKCS', 
+                status: 'Shut-in - Well Integrity Issues', 
+                issue: 'Multiple fish (CT & Wireline) in hole with suspected tubing-to-annulus communication.', 
+            },
+            { 
+                id: 'W001', name: 'CNR - Espoir-12', field: 'Espoir Field, Côte d\'Ivoire', status: 'Active - Underperforming', 
+                issue: 'Recurring scale buildup causing production decline.', 
+                history: [ { date: '2024-02-20', operation: 'Coiled Tubing Scale Cleanout', problem: 'Motor stalled multiple times due to unexpectedly hard scale. The fluid system was unable to efficiently lift the large volume of debris, causing a pack-off scare.', lesson: 'A high-viscosity fluid sweep is essential for hole cleaning when milling hard debris in deviated wells to prevent packing off.' } ]
+            },
+            // ... other well data objects
         ];
-        const proceduresData = {
-            siloed: { name: "Conventional P&A Procedure", steps: ["Attempt to fish tangled junk.", "Set a standard bridge plug above the fish.", "Pump cement plugs to abandon the well."], isFlawed: true },
-            integrated: { 
-                name: "AI-Guided P&A Procedure", 
-                steps: ["Circulate high-viscosity sweeps (Lesson from CNR).", "Use heavy-duty cutting tool to break up tangled fish (Lesson from Petronas).", "Set specialized, H₂S-rated bridge plug (Lesson from Woodside).", "Confirm isolation of smart completion hardware (Lesson from Saudi Aramco).", "Pump balanced cement plugs."],
-                isFlawed: false,
-                aiReasoning: `This plan is generated by integrating siloed data from a global pool of operators:
-                    <ul class="list-disc list-inside mt-2 text-left text-sm">
-                        <li>A **high-viscosity cleanout run** is included based on a pack-off event on a **CNR** well in Côte d'Ivoire.</li>
-                        <li>A **heavy-duty cutting tool** is required based on a tool failure report from a **Petronas** well in Malaysia.</li>
-                        <li>An **H₂S-rated mechanical plug** is specified after analyzing a DST tool failure on a **Woodside** well in Australia.</li>
-                        <li>The procedure confirms no smart completion hardware after analyzing an ICV failure on a **Saudi Aramco** well.</li>
-                    </ul>`
-            }
-        };
-
-        let appState = { currentView: 'planner', selectedWell: null, generatedPlan: null, isInitialized: false };
         
+        // --- GLOBAL STATE ---
+        let appState = { isInitialized: false };
+
+        // --- TEMPLATES ---
         const templates = {
-            planner: `<div id="planner-view" class="view-container max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"> ... </div>`,
-            // All other templates here...
+            planner: `
+                <div id="planner-view" class="view-container max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-8"><h2 class="text-3xl font-bold tracking-tight">Intervention Planner</h2></div>
+                    <section id="step-1">
+                        <div class="text-center"><h3 class="text-2xl font-bold tracking-tight">Step 1: Select a Well</h3><p class="mt-4 max-w-3xl mx-auto text-sm text-slate-400">Select the "Complex Workover Scenario" to begin. The other wells are historical assets whose siloed data contains the key to success.</p></div>
+                        <div id="well-selection-grid" class="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-5"></div>
+                    </section>
+                    <section id="step-2" class="hidden">
+                        <div class="text-center"><h3 class="text-2xl font-bold tracking-tight">Step 2: Choose Your Data Source</h3><p class="mt-4 max-w-3xl mx-auto text-lg text-slate-400">How do you want to plan this complex Plug & Abandonment operation?</p></div>
+                        <div id="plan-choice-container" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto"></div>
+                    </section>
+                    <section id="step-3" class="hidden">
+                        <div class="text-center"><h3 class="text-2xl font-bold tracking-tight">Step 3: Review the Generated Plan</h3></div><div id="plan-output" class="mt-10 light-card p-6 md:p-8 space-y-8 rounded-lg"></div>
+                        <div class="mt-8 flex justify-center space-x-4"><button id="start-over-btn" class="rounded-md bg-slate-600 px-6 py-3">Start Over</button><button id="begin-op-btn" class="rounded-md bg-emerald-600 px-6 py-3">Begin Live Operation</button></div>
+                    </section>
+                </div>`,
+            // ... other templates
         };
         
         function initDemo() {
             const mainContent = document.getElementById('main-content');
             const headerNav = document.getElementById('header-nav');
             
-            // This is a simplified representation of the templates. The full code would have the complete HTML structure.
-            mainContent.innerHTML = `<div id="planner-view" class="view-container max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><div class="text-center mb-8"><h2 class="text-3xl font-bold tracking-tight">Well Intervention Planner</h2></div><section id="step-1"><div class="text-center"><h3 class="text-2xl font-bold tracking-tight">Step 1: Select a Well</h3><p class="mt-4 max-w-3xl mx-auto text-sm text-slate-400">Select the "Complex Workover Scenario" to begin. The other wells are historical assets whose siloed data contains the key to success.</p></div><div id="well-selection-grid" class="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-5"></div></section><section id="step-2" class="hidden"><div class="text-center"><h3 class="text-2xl font-bold tracking-tight">Step 2: Choose Your Data Source</h3><p class="mt-4 max-w-3xl mx-auto text-lg text-slate-400">How do you want to plan this complex Plug & Abandonment operation?</p></div><div id="plan-choice-container" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto"></div></section><section id="step-3" class="hidden"><div class="text-center"><h3 class="text-2xl font-bold tracking-tight">Step 3: Review the Generated Plan</h3></div><div id="plan-output" class="mt-10 light-card p-6 md:p-8 space-y-8 rounded-lg"></div><div class="mt-8 flex justify-center space-x-4"><button id="start-over-btn" class="rounded-md bg-slate-600 px-6 py-3">Start Over</button><button id="begin-op-btn" class="rounded-md bg-emerald-600 px-6 py-3">Begin Live Operation</button></div></section></div>`;
+            mainContent.innerHTML = templates.planner;
             
             headerNav.innerHTML = `<a id="planner-nav-link" class="nav-link flex items-center space-x-2">Planner</a>`;
             
@@ -206,16 +229,16 @@
         function updatePlannerStepUI(step) {
             document.querySelectorAll('#planner-view section').forEach(s => s.classList.add('hidden'));
             document.getElementById(`step-${step}`).classList.remove('hidden');
-
+            
             if (step === 2) {
-                const container = document.getElementById('plan-choice-container');
+                 const container = document.getElementById('plan-choice-container');
                 container.innerHTML = `
-                    <div id="siloed-plan-choice" class="plan-choice-card light-card p-6 rounded-lg cursor-pointer hover:border-sky-500 border-2 border-transparent">
-                        <h4 class="text-xl font-bold text-red-400">Siloed Plan</h4>
-                        <p class="text-sm text-slate-400 mt-2">Use only the data available for this well (Conventional Approach).</p>
+                    <div id="siloed-plan-choice" class="plan-choice-card light-card p-6 rounded-lg cursor-pointer hover:border-red-500 border-2 border-transparent">
+                        <h4 class="text-xl font-bold text-red-400">Engineer's Siloed View</h4>
+                        <p class="text-sm text-slate-400 mt-2">Plan using only the data available for <strong>this well</strong> (Conventional Approach).</p>
                     </div>
-                    <div id="integrated-plan-choice" class="plan-choice-card light-card p-6 rounded-lg cursor-pointer hover:border-sky-500 border-2 border-transparent">
-                        <h4 class="text-xl font-bold text-teal-400">AI-Guided Integrated Plan</h4>
+                    <div id="integrated-plan-choice" class="plan-choice-card light-card p-6 rounded-lg cursor-pointer hover:border-teal-500 border-2 border-transparent">
+                        <h4 class="text-xl font-bold text-teal-400">Well-Tegra Integrated View</h4>
                         <p class="text-sm text-slate-400 mt-2">Leverage the full Well-Tegra data pool from global operators.</p>
                     </div>
                 `;
@@ -245,10 +268,9 @@
                 ${plan.aiReasoning ? `<div><h4 class="text-xl font-semibold">AI Reasoning</h4><div class="mt-2 text-slate-300">${plan.aiReasoning}</div></div>` : ''}
             `;
             document.getElementById('start-over-btn').addEventListener('click', () => switchView('planner'));
-            document.getElementById('begin-op-btn').addEventListener('click', () => { /* Performer logic would go here */ });
+            document.getElementById('begin-op-btn').addEventListener('click', () => alert('Performer simulation would launch here.'));
         }
     });
 </script>
 </body>
 </html>
-```
